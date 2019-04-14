@@ -4437,9 +4437,9 @@ void ObjectMgr::LoadQuests()
         // 0   1       2       3       4       5            6            7            8            9
         { "ID, Emote1, Emote2, Emote3, Emote4, EmoteDelay1, EmoteDelay2, EmoteDelay3, EmoteDelay4, RewardText",                                                           "quest_offer_reward",   "reward emotes",       &Quest::LoadQuestOfferReward   },
 
-        // 0   1         2                 3              4            5            6               7                     8                     9
-        { "ID, MaxLevel, AllowableClasses, SourceSpellID, PrevQuestID, NextQuestID, ExclusiveGroup, BreadcrumbForQuestId, RewardMailTemplateID, RewardMailDelay,"
-        // 10              11                   12                     13                     14                   15                   16                 17
+        // 0   1         2                 3              4            5            6               7                     8
+        { "ID, MaxLevel, AllowableClasses, SourceSpellID, PrevQuestID, NextQuestID, ExclusiveGroup, RewardMailTemplateID, RewardMailDelay,"
+        // 9               10                   11                     12                     13                   14                   15                 16
         " RequiredSkillID, RequiredSkillPoints, RequiredMinRepFaction, RequiredMaxRepFaction, RequiredMinRepValue, RequiredMaxRepValue, ProvidedItemCount, SpecialFlags", "quest_template_addon", "template addons",     &Quest::LoadQuestTemplateAddon },
 
         // 0        1
@@ -4978,11 +4978,8 @@ void ObjectMgr::LoadQuests()
         // fill additional data stores
         if (uint32 prevQuestId = std::abs(qinfo->_prevQuestId))
         {
-            auto prevQuestItr = _questTemplates.find(prevQuestId);
-            if (prevQuestItr == _questTemplates.end())
+            if (!_questTemplates.count(prevQuestId))
                 TC_LOG_ERROR("sql.sql", "Quest %u has PrevQuestId %i, but no such quest", qinfo->GetQuestId(), qinfo->_prevQuestId);
-            else if (prevQuestItr->second._breadcrumbForQuestId)
-                TC_LOG_ERROR("sql.sql", "Quest %u should not be unlocked by breadcrumb quest %u", qinfo->_id, prevQuestId);
         }
 
         if (uint32 nextQuestId = qinfo->_nextQuestId)
@@ -4992,19 +4989,6 @@ void ObjectMgr::LoadQuests()
                 TC_LOG_ERROR("sql.sql", "Quest %u has NextQuestId %u, but no such quest", qinfo->GetQuestId(), qinfo->_nextQuestId);
             else
                 nextQuestItr->second.DependentPreviousQuests.push_back(qinfo->GetQuestId());
-        }
-
-        if (uint32 breadcrumbForQuestId = std::abs(qinfo->_breadcrumbForQuestId))
-        {
-            if (_questTemplates.find(breadcrumbForQuestId) == _questTemplates.end())
-            {
-                TC_LOG_ERROR("sql.sql", "Quest %u is a breadcrumb for quest %u, but no such quest exists", qinfo->_id, breadcrumbForQuestId);
-                qinfo->_breadcrumbForQuestId = 0;
-            }
-            if (qinfo->_nextQuestId)
-                TC_LOG_ERROR("sql.sql", "Quest %u is a breadcrumb, should not unlock quest %u", qinfo->_id, qinfo->_nextQuestId);
-            if (qinfo->_exclusiveGroup)
-                TC_LOG_ERROR("sql.sql", "Quest %u is a breadcrumb in exclusive group %i", qinfo->_id, qinfo->_exclusiveGroup);
         }
 
         if (qinfo->_exclusiveGroup)
@@ -5032,38 +5016,6 @@ void ObjectMgr::LoadQuests()
 
             if (addFlag)
                 qinfo->SetSpecialFlag(QUEST_SPECIAL_FLAGS_COMPLETED_AT_START);
-        }
-    }
-
-    // Disallow any breadcrumb loops and inform quests of their breadcrumbs
-    for (auto& questPair : _questTemplates)
-    {
-        // skip post-loading checks for disabled quests
-        if (DisableMgr::IsDisabledFor(DISABLE_TYPE_QUEST, questPair.first, nullptr))
-            continue;
-
-        Quest* qinfo = &questPair.second;
-        uint32   qid = qinfo->GetQuestId();
-        uint32 breadcrumbForQuestId = std::abs(qinfo->_breadcrumbForQuestId);
-        std::set<uint32> questSet;
-
-        while(breadcrumbForQuestId)
-        {
-            //a previously visited quest was found as a breadcrumb quest
-            //breadcrumb loop found!
-            if (!questSet.insert(qinfo->_id).second)
-            {
-                TC_LOG_ERROR("sql.sql", "Breadcrumb quests %u and %u are in a loop", qid, breadcrumbForQuestId);
-                qinfo->_breadcrumbForQuestId = 0;
-                break;
-            }
-
-            qinfo = const_cast<Quest*>(sObjectMgr->GetQuestTemplate(breadcrumbForQuestId));
-
-            //every quest has a list of every breadcrumb towards it
-            qinfo->DependentBreadcrumbQuests.push_back(qid);
-
-            breadcrumbForQuestId = qinfo->GetBreadcrumbForQuestId();
         }
     }
 
@@ -6501,7 +6453,7 @@ uint32 ObjectMgr::GetNearestTaxiNode(float x, float y, float z, uint32 mapid, ui
         uint32 submask = 1<<((i-1)%32);
 
         // skip not taxi network nodes
-        if ((sTaxiNodesMask[field] & submask) == 0)
+        if (field >= TaxiMaskSize || (sTaxiNodesMask[field] & submask) == 0)
             continue;
 
         float dist2 = (node->x - x)*(node->x - x)+(node->y - y)*(node->y - y)+(node->z - z)*(node->z - z);
