@@ -39,6 +39,10 @@
 #include "SpellMgr.h"
 #include "TemporarySummon.h"
 #include "Totem.h"
+#ifdef ELUNA
+#include "LuaEngine.h"
+#include "ElunaEventMgr.h"
+#endif
 #include "Transport.h"
 #include "Unit.h"
 #include "UpdateFieldFlags.h"
@@ -74,6 +78,11 @@ Object::Object() : m_PackGUID(sizeof(uint64)+1)
 
 WorldObject::~WorldObject()
 {
+#ifdef ELUNA
+    delete elunaEvents;
+    elunaEvents = NULL;
+#endif
+
     // this may happen because there are many !create/delete
     if (IsWorldObject() && m_currMap)
     {
@@ -964,6 +973,9 @@ void MovementInfo::OutDebug()
 }
 
 WorldObject::WorldObject(bool isWorldObject) : Object(), WorldLocation(), LastUsedScriptID(0),
+#ifdef ELUNA
+elunaEvents(NULL),
+#endif
 m_movementInfo(), m_name(), m_isActive(false), m_isFarVisible(false), m_isWorldObject(isWorldObject), m_zoneScript(nullptr),
 m_transport(nullptr), m_zoneId(0), m_areaId(0), m_staticFloorZ(VMAP_INVALID_HEIGHT), m_currMap(nullptr), m_InstanceId(0),
 m_phaseMask(PHASEMASK_NORMAL), m_notifyflags(0)
@@ -1048,6 +1060,13 @@ void WorldObject::CleanupsBeforeDelete(bool /*finalCleanup*/)
 
     if (Transport* transport = GetTransport())
         transport->RemovePassenger(this);
+}
+
+void WorldObject::Update (uint32 time_diff)
+{
+#ifdef ELUNA
+    elunaEvents->Update(time_diff);
+#endif
 }
 
 void WorldObject::_Create(ObjectGuid::LowType guidlow, HighGuid guidhigh, uint32 phaseMask)
@@ -1414,16 +1433,11 @@ void WorldObject::UpdateGroundPositionZ(float x, float y, float &z) const
         z = new_z + (isType(TYPEMASK_UNIT) ? static_cast<Unit const*>(this)->GetHoverOffset() : 0.0f);
 }
 
-void WorldObject::UpdateAllowedPositionZ(float x, float y, float &z, float* groundZ) const
+void WorldObject::UpdateAllowedPositionZ(float x, float y, float &z) const
 {
     // TODO: Allow transports to be part of dynamic vmap tree
     if (GetTransport())
-    {
-        if (groundZ)
-            *groundZ = z;
-
         return;
-    }
 
     if (Unit const* unit = ToUnit())
     {
@@ -1449,18 +1463,12 @@ void WorldObject::UpdateAllowedPositionZ(float x, float y, float &z, float* grou
                 else if (z < ground_z)
                     z = ground_z;
             }
-
-            if (groundZ)
-                *groundZ = ground_z;
         }
         else
         {
             float ground_z = GetMapHeight(x, y, z) + unit->GetHoverOffset();
             if (z < ground_z)
                 z = ground_z;
-
-            if (groundZ)
-               *groundZ = ground_z;
         }
     }
     else
@@ -1468,9 +1476,6 @@ void WorldObject::UpdateAllowedPositionZ(float x, float y, float &z, float* grou
         float ground_z = GetMapHeight(x, y, z);
         if (ground_z > INVALID_HEIGHT)
             z = ground_z;
-
-        if (groundZ)
-            *groundZ = ground_z;
     }
 }
 
@@ -1794,6 +1799,13 @@ void WorldObject::SetMap(Map* map)
     m_currMap = map;
     m_mapId = map->GetId();
     m_InstanceId = map->GetInstanceId();
+
+#ifdef ELUNA
+    delete elunaEvents;
+    // On multithread replace this with a pointer to map's Eluna pointer stored in a map
+    elunaEvents = new ElunaEventProcessor(&Eluna::GEluna, this);
+#endif
+
     if (IsWorldObject())
         m_currMap->AddWorldObject(this);
 }
@@ -1804,6 +1816,12 @@ void WorldObject::ResetMap()
     ASSERT(!IsInWorld());
     if (IsWorldObject())
         m_currMap->RemoveWorldObject(this);
+
+#ifdef ELUNA
+    delete elunaEvents;
+    elunaEvents = NULL;
+#endif
+
     m_currMap = nullptr;
     //maybe not for corpse
     //m_mapId = 0;
@@ -3297,27 +3315,10 @@ void WorldObject::MovePositionToFirstCollision(Position &pos, float dist, float 
         }
     }
 
-    float groundZ = VMAP_INVALID_HEIGHT_VALUE;
     Trinity::NormalizeMapCoord(pos.m_positionX);
     Trinity::NormalizeMapCoord(pos.m_positionY);
-    UpdateAllowedPositionZ(destx, desty, pos.m_positionZ, &groundZ);
+    UpdateAllowedPositionZ(destx, desty, pos.m_positionZ);
     pos.SetOrientation(GetOrientation());
-
-    // position has no ground under it (or is too far away)
-    if (groundZ <= INVALID_HEIGHT)
-    {
-        if (Unit const* unit = ToUnit())
-        {
-            // unit can fly, ignore.
-            if (unit->CanFly())
-                return;
-
-            // fall back to gridHeight if any
-            float gridHeight = GetMap()->GetGridHeight(pos.m_positionX, pos.m_positionY);
-            if (gridHeight > INVALID_HEIGHT)
-                pos.m_positionZ = gridHeight + unit->GetHoverOffset();
-        }
-    }
 }
 
 void WorldObject::SetPhaseMask(uint32 newPhaseMask, bool update)
