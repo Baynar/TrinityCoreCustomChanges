@@ -1896,6 +1896,14 @@ ChatFakeMessagePreventing = 1
 ChatStrictLinkChecking.Severity = 0
 
 #
+#    ChatStrictLinkChecking.CustomLinks
+#        Description: Check chat messages for ingame links and allow custom ones (custom colors in name, quest level in name, etc)
+#        Default:     0 - (Custom links are NOT allowed)
+#                     1 - (Custom links are allowed. This might cause client side crashes)
+
+ChatStrictLinkChecking.CustomLinks = 0
+
+#
 #    ChatStrictLinkChecking.Kick
 #        Description: Defines what should be done if a message containing invalid control characters
 #                     is received.
@@ -3223,6 +3231,40 @@ LevelReq.Auction = 1
 LevelReq.Mail = 1
 
 #
+#     Anticheat.Enable
+#        Description: Enables or disables the Anticheat System functionality
+#        Default:     1 - (Enabled)
+#                     0 - (Disabled)
+
+Anticheat.Enable = 1
+
+#     Anticheat.ReportsForIngameWarnings
+#        Description: How many reports the player must have to notify to GameMasters ingame when he generates a new report.
+#        Default:     70
+
+Anticheat.ReportsForIngameWarnings = 70
+
+#     Anticheat.DetectionsEnabled
+#        Description: It represents which detections are enabled.
+#
+#        SPEED_HACK_DETECTION            = 1
+#        FLY_HACK_DETECTION              = 2
+#        WALK_WATER_HACK_DETECTION       = 4
+#        JUMP_HACK_DETECTION             = 8
+#        TELEPORT_PLANE_HACK_DETECTION   = 16
+#        CLIMB_HACK_DETECTION            = 32
+#
+#        Default:     31
+
+Anticheat.DetectionsEnabled = 31
+
+#     Anticheat.MaxReportsForDailyReport
+#        Description: How many reports must the player have to make a report that it is in DB for a day (not only during the player's session).
+#        Default:     70
+
+Anticheat.MaxReportsForDailyReport = 70
+
+#
 #     PlayerDump.DisallowPaths
 #        Description: Disallow using paths in PlayerDump output files
 #        Default:     1
@@ -3285,6 +3327,29 @@ PreventRenameCharacterOnCustomization = 0
 
 #
 ###################################################################################################
+
+###################################################################################################
+# PVP RANK / TITLE SYSTEM
+#
+#    PvPRank.Rate.ExtraHonor
+#        Description: Rate of honor bonus for killing higher pvp ranked players
+#        Default:     1 - 10% more honor per rank difference
+#                     2 - 20%
+#                     0 - off
+
+PvPRank.Rate.ExtraHonor = 1
+
+#
+#    PvPRank.HKPerRank
+#        Description: Honor Kills needed for each rank, use "," between values.
+#                     Whole string must be enclosed with " "
+#                     Always specify 14 values, for 14 ranks
+#        Default:     "100,500,1000,2500,4000,6500,9500,12000,15000,20000,35000,50000,75000,100000"
+
+PvPRank.HKPerRank = "100,500,1000,2500,4000,6500,9500,12000,15000,20000,35000,50000,75000,100000"
+
+#
+####################################################################################################
 
 ###################################################################################################
 # AUCTION HOUSE BOT SETTINGS
