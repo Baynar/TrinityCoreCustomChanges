@@ -19,16 +19,20 @@
 void AddSC_Transmogrification();
 void AddSC_npc_teleport();
 void AddSC_REFORGER_NPC();
+void AddSC_npc_gurubashi_theme();
+void AddSC_System();
+void AddSC_Npc_Beastmaster();
+void AddSC_npc_1v1arena();
 
 
 // The name of this function should match:
 // void Add${NameOfDirectory}Scripts()
 void AddCustomScripts()
 {
-    // 1
-    // 2
-    // 3
-    // 4
+    AddSC_npc_gurubashi_theme();
+    AddSC_System();
+    AddSC_Npc_Beastmaster();
+    AddSC_npc_1v1arena();
     // 5
     // 6
     // 7
