@@ -775,6 +775,9 @@ enum RBACPermissions
     // IF YOU ADD NEW PERMISSIONS, ADD THEM IN MASTER BRANCH AS WELL!
     //
     // custom permissions 1000+
+    RBAC_PERM_COMMAND_WORLD_CHAT                            = 1009, // RBAC PERMISSION .chat
+    RBAC_PERM_COMMAND_WORLD_CHAT_HORDE                      = 1010, // RBAC-PERMISSION .chath
+    RBAC_PERM_COMMAND_WORLD_CHAT_ALLIANCE                   = 1011, // RBAC-PERMISSION .chata
     RBAC_PERM_MAX
 };
 

@@ -23,6 +23,8 @@ void AddSC_npc_gurubashi_theme();
 void AddSC_System();
 void AddSC_Npc_Beastmaster();
 void AddSC_npc_1v1arena();
+void AddSC_world_chat();
+void AddSC_login_announcer();
 
 
 // The name of this function should match:
@@ -33,8 +35,8 @@ void AddCustomScripts()
     AddSC_System();
     AddSC_Npc_Beastmaster();
     AddSC_npc_1v1arena();
-    // 5
-    // 6
+    AddSC_world_chat();
+    AddSC_login_announcer();
     // 7
     // 8
     // 9
