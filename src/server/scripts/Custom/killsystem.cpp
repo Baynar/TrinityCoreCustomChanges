@@ -15,6 +15,7 @@ class System_OnPvPKill : public PlayerScript
             // Send as Raid Warning = SMSG_NOTIFICATION
             WorldPacket data(SMSG_NOTIFICATION, 100);
             WorldPacket data2(SMSG_NOTIFICATION, 100);
+            WorldPacket data3(SMSG_NOTIFICATION, 100);
             int32 ItemReward = 29434;
             int32 AmountOfRewardsOnKillStreak[4] = { 5, 10, 15, 30 };
             // Announce on X kills
@@ -25,6 +26,8 @@ class System_OnPvPKill : public PlayerScript
             int32 KillStreaks[4] = { pKillerStreak1, pKillerStreak2, pKillerStreak3, pKillerStreak4 };
 
             char msg[500];
+            char msg2[500];
+            char msg3[500];
             uint32 pKillerGUID = pKiller->GetGUID();
             uint32 VictimGUID = pVictim->GetGUID();
             std::string pKillername = pKiller->GetName();
@@ -54,43 +57,43 @@ class System_OnPvPKill : public PlayerScript
             KillStreakData[pKillerGUID].LastGUIDKill = VictimGUID;
             KillStreakData[VictimGUID].LastGUIDKill = 0;
 
-            snprintf(msg, 500, "|cffFF0000[PVP SYSTEM]: |cff00FF00%s|r has killed |cff00FF00%s|r", pKillername.c_str(), killedname.c_str());
-            data2 << msg;
+            snprintf(msg2, 500, "|cffFF0000[PVP SYSTEM]: |cff00FF00%s|r has killed |cff00FF00%s|r", pKillername.c_str(), killedname.c_str());
+            data2 << msg2;
             sWorld->SendGlobalMessage(&data2);
 
             switch (KillStreakData[pKillerGUID].KillStreak)
             {
             case pKillerStreak1:
-                snprintf(msg, 500, "|cffFF0000[PVP SYSTEM]: |cff00FF00%s|r has killed |cff00FF00%s|r and is on |cff00FFFF%i|r killing streak!", pKillername.c_str(), killedname.c_str(), pKillerStreak1);
-                data2 << msg;
-                sWorld->SendGlobalMessage(&data2);
+                snprintf(msg3, 500, "|cffFF0000[PVP SYSTEM]: |cff00FF00%s|r has killed |cff00FF00%s|r and is on |cff00FFFF%i|r killing streak!", pKillername.c_str(), killedname.c_str(), pKillerStreak1);
+                data3 << msg3;
+                sWorld->SendGlobalMessage(&data3);
                 pKiller->AddItem(ItemReward, AmountOfRewardsOnKillStreak[1]);
                 pKiller->ModifyHonorPoints(500);
                 pKiller->CastSpell(pKiller, 24378, true);
                 break;
 
             case pKillerStreak2:
-                snprintf(msg, 500, "|cffFF0000[PVP SYSTEM]: |cff00FF00%s|r has killed |cff00FF00%s|r and is on |cff00FFFF%i|r killing streak!", pKillername.c_str(), killedname.c_str(), pKillerStreak2);
-                data2 << msg;
-                sWorld->SendGlobalMessage(&data2);
+                snprintf(msg3, 500, "|cffFF0000[PVP SYSTEM]: |cff00FF00%s|r has killed |cff00FF00%s|r and is on |cff00FFFF%i|r killing streak!", pKillername.c_str(), killedname.c_str(), pKillerStreak2);
+                data3 << msg3;
+                sWorld->SendGlobalMessage(&data3);
                 pKiller->AddItem(ItemReward, AmountOfRewardsOnKillStreak[2]);
                 pKiller->ModifyHonorPoints(1000);
                 pKiller->CastSpell(pKiller, 24378, true);
                 break;
 
             case pKillerStreak3:
-                snprintf(msg, 500, "|cffFF0000[PVP SYSTEM]: |cff00FF00%s|r has killed |cff00FF00%s|r and is on |cff00FFFF%i|r killing streak!", pKillername.c_str(), killedname.c_str(), pKillerStreak3);
-                data2 << msg;
-                sWorld->SendGlobalMessage(&data2);
+                snprintf(msg3, 500, "|cffFF0000[PVP SYSTEM]: |cff00FF00%s|r has killed |cff00FF00%s|r and is on |cff00FFFF%i|r killing streak!", pKillername.c_str(), killedname.c_str(), pKillerStreak3);
+                data3 << msg3;
+                sWorld->SendGlobalMessage(&data3);
                 pKiller->AddItem(ItemReward, AmountOfRewardsOnKillStreak[3]);
                 pKiller->ModifyHonorPoints(1500);
                 pKiller->CastSpell(pKiller, 24378, true);
                 break;
 
             case pKillerStreak4:
-                snprintf(msg, 500, "|cffFF0000[PVP SYSTEM]: |cff00FF00%s|r has killed |cff00FF00%s|r and is on |cff00FFFF%i|r killing streak!", pKillername.c_str(), killedname.c_str(), pKillerStreak4);
-                data2 << msg;
-                sWorld->SendGlobalMessage(&data2);
+                snprintf(msg3, 500, "|cffFF0000[PVP SYSTEM]: |cff00FF00%s|r has killed |cff00FF00%s|r and is on |cff00FFFF%i|r killing streak!", pKillername.c_str(), killedname.c_str(), pKillerStreak4);
+                data3 << msg3;
+                sWorld->SendGlobalMessage(&data3);
                 KillStreakData[pKillerGUID].KillStreak = 0;
                 pKiller->AddItem(ItemReward, AmountOfRewardsOnKillStreak[4]);
                 pKiller->ModifyArenaPoints(100);
