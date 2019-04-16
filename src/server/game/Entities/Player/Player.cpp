@@ -2711,19 +2711,29 @@ void Player::InitTalentForLevel()
             m_activeSpec = 0;
         }
 
-        uint32 talentPointsForLevel = CalculateTalentsPoints();
-
-        // if used more that have then reset
-        if (m_usedTalentCount > talentPointsForLevel)
+        if (sWorld->getBoolConfig(CONFIG_START_ALL_TALENTS) == true)
         {
-            if (!GetSession()->HasPermission(rbac::RBAC_PERM_SKIP_CHECK_MORE_TALENTS_THAN_ALLOWED))
-                ResetTalents(true);
-            else
-                SetFreeTalentPoints(0);
+            if (HasAtLoginFlag(AT_LOGIN_FIRST))
+            {
+                LearnAllTalents();
+            }
         }
-        // else update amount of free points
         else
-            SetFreeTalentPoints(talentPointsForLevel - m_usedTalentCount);
+        {
+            uint32 talentPointsForLevel = CalculateTalentsPoints();
+
+            // if used more that have then reset
+            if (m_usedTalentCount > talentPointsForLevel)
+            {
+                if (!GetSession()->HasPermission(rbac::RBAC_PERM_SKIP_CHECK_MORE_TALENTS_THAN_ALLOWED))
+                    ResetTalents(true);
+                else
+                    SetFreeTalentPoints(0);
+            }
+            // else update amount of free points
+            else
+                SetFreeTalentPoints(talentPointsForLevel - m_usedTalentCount);
+        } 
     }
 
     if (!GetSession()->PlayerLoading())
@@ -3875,6 +3885,54 @@ uint32 Player::ResetTalentsCost() const
             return new_cost;
         }
     }
+}
+
+void Player::LearnAllTalents()
+{
+    uint32 classMask = getClassMask();
+
+    for (uint32 i = 0; i < sTalentStore.GetNumRows(); ++i)
+    {
+        TalentEntry const* talentInfo = sTalentStore.LookupEntry(i);
+        if (!talentInfo)
+            continue;
+
+        TalentTabEntry const* talentTabInfo = sTalentTabStore.LookupEntry(talentInfo->TalentTab);
+        if (!talentTabInfo)
+            continue;
+
+        if ((classMask & talentTabInfo->ClassMask) == 0)
+            continue;
+
+        // search highest talent rank
+        uint32 spellId = 0;
+        for (int8 rank = MAX_TALENT_RANK - 1; rank >= 0; --rank)
+        {
+            if (talentInfo->RankID[rank] != 0)
+            {
+                spellId = talentInfo->RankID[rank];
+                break;
+            }
+        }
+
+        if (!spellId)                                        // ??? none spells in talent
+            continue;
+
+        SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
+        if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, this, false))
+            continue;
+
+        // learn highest rank of talent and learn all non-talent spell ranks (recursive by tree)
+        LearnSpellHighestRank(spellId);
+        AddTalent(spellId, GetActiveSpec(), true);
+    }
+
+    SetFreeTalentPoints(0);
+
+    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+    _SaveTalents(trans);
+    _SaveSpells(trans);
+    CharacterDatabase.CommitTransaction(trans);
 }
 
 bool Player::ResetTalents(bool no_cost)
@@ -5337,7 +5395,8 @@ float Player::GetMeleeCritFromAgility() const
         return 0.0f;
 
     float crit = critBase->base + GetStat(STAT_AGILITY)*critRatio->ratio;
-    return crit*100.0f;
+    crit = crit > 30.0f ? 30.0f : crit;
+    return crit; //* 100.0f;
 }
 
 void Player::GetDodgeFromAgility(float &diminishing, float &nondiminishing) const
@@ -5390,7 +5449,9 @@ void Player::GetDodgeFromAgility(float &diminishing, float &nondiminishing) cons
 
     // calculate diminishing (green in char screen) and non-diminishing (white) contribution
     diminishing = 100.0f * bonus_agility * dodgeRatio->ratio * crit_to_dodge[pclass-1];
+    diminishing = diminishing > 30.0f ? 30.0f : diminishing;
     nondiminishing = 100.0f * (dodge_base[pclass-1] + base_agility * dodgeRatio->ratio * crit_to_dodge[pclass-1]);
+    nondiminishing = nondiminishing > 30.0f ? 30.0f : nondiminishing;
 }
 
 float Player::GetSpellCritFromIntellect() const
@@ -5407,7 +5468,8 @@ float Player::GetSpellCritFromIntellect() const
         return 0.0f;
 
     float crit = critBase->base + GetStat(STAT_INTELLECT) * critRatio->ratio;
-    return crit * 100.0f;
+    crit = crit > 30.0f ? 30.0f : crit;
+    return crit; //* 100.0f;
 }
 
 float Player::GetRatingMultiplier(CombatRating cr) const
@@ -5422,6 +5484,18 @@ float Player::GetRatingMultiplier(CombatRating cr) const
     GtOCTClassCombatRatingScalarEntry const* classRating = sGtOCTClassCombatRatingScalarStore.LookupEntry((getClass()-1)*GT_MAX_RATING+cr+1);
     if (!Rating || !classRating)
         return 1.0f;                                        // By default use minimum coefficient (not must be called)
+
+    switch (cr) {
+    case CR_HASTE_MELEE:
+        return classRating->ratio / Rating->ratio / 2;
+        break;
+    case CR_HASTE_RANGED:
+        return classRating->ratio / Rating->ratio / 2;
+        break;
+    case CR_HASTE_SPELL:
+        return classRating->ratio / Rating->ratio / 1.5;
+        break;
+    }
 
     return classRating->ratio / Rating->ratio;
 }

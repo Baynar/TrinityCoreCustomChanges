@@ -1503,6 +1503,7 @@ class TC_GAME_API Player : public Unit, public GridObject<Player>
         void SetFreeTalentPoints(uint32 points);
         bool ResetTalents(bool no_cost = false);
         uint32 ResetTalentsCost() const;
+        void LearnAllTalents();
         void InitTalentForLevel();
         void BuildPlayerTalentsInfoData(WorldPacket* data);
         void BuildPetTalentsInfoData(WorldPacket* data);

@@ -264,7 +264,7 @@ void Player::UpdateArmor()
 
     float value = GetFlatModifierValue(unitMod, BASE_VALUE);    // base armor (from items)
     value *= GetPctModifierValue(unitMod, BASE_PCT);            // armor percent from items
-    value += GetStat(STAT_AGILITY) * 2.0f;                      // armor bonus from stats
+    //value += GetStat(STAT_AGILITY) * 2.0f;                      // armor bonus from stats
     value += GetFlatModifierValue(unitMod, TOTAL_VALUE);
 
     //add dynamic flat mods
@@ -837,6 +837,9 @@ void Player::UpdateSpellCritChance(uint32 school)
     crit += GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_SPELL_CRIT_CHANCE_SCHOOL, 1<<school);
     // Increase crit from spell crit ratings
     crit += GetRatingBonusValue(CR_CRIT_SPELL);
+
+    if (sWorld->getBoolConfig(CONFIG_STATS_LIMITS_ENABLE))
+        crit = crit > sWorld->getFloatConfig(CONFIG_STATS_LIMITS_CRIT) ? sWorld->getFloatConfig(CONFIG_STATS_LIMITS_CRIT) : crit;
 
     // Store crit value
     SetFloatValue(PLAYER_SPELL_CRIT_PERCENTAGE1 + school, crit);
