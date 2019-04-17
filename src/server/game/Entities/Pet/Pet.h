@@ -129,6 +129,7 @@ class TC_GAME_API Pet : public Guardian
 
         bool resetTalents();
         static void resetTalentsForAllPetsOf(Player* owner, Pet* online_pet = nullptr);
+        void LearnTalents();
         void InitTalentForLevel();
 
         uint8 GetMaxTalentPointsForLevel(uint8 level) const;

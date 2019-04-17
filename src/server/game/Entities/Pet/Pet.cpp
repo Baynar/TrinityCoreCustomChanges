@@ -1729,18 +1729,85 @@ void Pet::resetTalentsForAllPetsOf(Player* owner, Pet* onlinePet /*= nullptr*/)
     CharacterDatabase.Execute(ss.str().c_str());
 }
 
-void Pet::InitTalentForLevel()
+void Pet::LearnTalents()
 {
-    uint8 level = getLevel();
-    uint32 talentPointsForLevel = GetMaxTalentPointsForLevel(level);
-    // Reset talents in case low level (on level down) or wrong points for level (hunter can unlearn TP increase talent)
-    if (talentPointsForLevel == 0 || m_usedTalentCount > talentPointsForLevel)
-        resetTalents(); // Remove all talent points
+    Player* player = GetOwner();
 
-    SetFreeTalentPoints(talentPointsForLevel - m_usedTalentCount);
+    CreatureTemplate const* ci = GetCreatureTemplate();
+    if (!ci)
+        return;
+    // Check pet talent type
+    CreatureFamilyEntry const* pet_family = sCreatureFamilyStore.LookupEntry(ci->family);
+    if (!pet_family || pet_family->petTalentType < 0)
+        return;
+
+    for (uint32 i = 0; i < sTalentStore.GetNumRows(); ++i)
+    {
+        TalentEntry const* talentInfo = sTalentStore.LookupEntry(i);
+
+        if (!talentInfo)
+            continue;
+
+        TalentTabEntry const* talentTabInfo = sTalentTabStore.LookupEntry(talentInfo->TalentTab);
+
+        if (!talentTabInfo)
+            continue;
+
+        // unlearn only talents for pets family talent type
+        if (!((1 << pet_family->petTalentType) & talentTabInfo->petTalentMask))
+            continue;
+
+        // search highest talent rank
+        uint32 spellId = 0;
+        for (int8 rank = MAX_TALENT_RANK - 1; rank >= 0; --rank)
+        {
+            if (talentInfo->RankID[rank] != 0)
+            {
+                spellId = talentInfo->RankID[rank];
+                break;
+            }
+        }
+
+        if (!spellId)                                        // ??? none spells in talent
+            continue;
+
+        SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
+        if (!spellInfo)
+            continue;
+
+        // learn highest rank of talent and learn all non-talent spell ranks (recursive by tree)
+        learnSpellHighRank(spellId);
+        addSpell(spellId);
+    }
+
+    SetFreeTalentPoints(0);
 
     if (!m_loading)
-        GetOwner()->SendTalentsInfoData(true);
+        player->PetSpellInitialize();
+
+    if (!m_loading)
+        player->SendTalentsInfoData(true);  // update at client
+}
+
+void Pet::InitTalentForLevel()
+{
+    if (sWorld->getBoolConfig(CONFIG_START_ALL_TALENTS) == true)
+    {
+        LearnTalents();
+    }
+    else
+    {
+        uint8 level = getLevel();
+        uint32 talentPointsForLevel = GetMaxTalentPointsForLevel(level);
+        // Reset talents in case low level (on level down) or wrong points for level (hunter can unlearn TP increase talent)
+        if (talentPointsForLevel == 0 || m_usedTalentCount > talentPointsForLevel)
+            resetTalents(); // Remove all talent points
+
+        SetFreeTalentPoints(talentPointsForLevel - m_usedTalentCount);
+
+        if (!m_loading)
+            GetOwner()->SendTalentsInfoData(true);
+    }
 }
 
 uint8 Pet::GetMaxTalentPointsForLevel(uint8 level) const
