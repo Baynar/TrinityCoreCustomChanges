@@ -1297,6 +1297,9 @@ void World::LoadConfigSettings(bool reload)
         m_int_configs[CONFIG_RESPAWN_DYNAMICMODE] = 0;
     }
     m_bool_configs[CONFIG_RESPAWN_DYNAMIC_ESCORTNPC] = sConfigMgr->GetBoolDefault("Respawn.DynamicEscortNPC", false);
+    m_bool_configs[CONFIG_AWARDS_PER_TIME] = sConfigMgr->GetBoolDefault("SystemAwardsForTime.Enable", false);
+    m_bool_configs[CONFIG_WORLD_CHAT_ENABLED] = sConfigMgr->GetBoolDefault("World_Chat.Enable", false);
+    m_bool_configs[CONFIG_WORLD_CHAT_CROSSFACTION] = sConfigMgr->GetBoolDefault("World_Chat.CrossFactions", false);
     m_int_configs[CONFIG_RESPAWN_GUIDWARNLEVEL] = sConfigMgr->GetIntDefault("Respawn.GuidWarnLevel", 12000000);
     if (m_int_configs[CONFIG_RESPAWN_GUIDWARNLEVEL] > 16777215)
     {
@@ -1375,6 +1378,7 @@ void World::LoadConfigSettings(bool reload)
 
     m_int_configs[CONFIG_MAX_WHO] = sConfigMgr->GetIntDefault("MaxWhoListReturns", 49);
     m_bool_configs[CONFIG_START_ALL_SPELLS] = sConfigMgr->GetBoolDefault("PlayerStart.AllSpells", false);
+    m_bool_configs[CONFIG_START_ALL_TALENTS] = sConfigMgr->GetBoolDefault("PlayerStart.AllTalents", false);
     m_int_configs[CONFIG_HONOR_AFTER_DUEL] = sConfigMgr->GetIntDefault("HonorPointsAfterDuel", 0);
     m_bool_configs[CONFIG_RESET_DUEL_COOLDOWNS] = sConfigMgr->GetBoolDefault("ResetDuelCooldowns", false);
     m_bool_configs[CONFIG_RESET_DUEL_HEALTH_MANA] = sConfigMgr->GetBoolDefault("ResetDuelHealthMana", false);

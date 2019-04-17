@@ -4358,3 +4358,40 @@ Arena.1v1.MinLevel = 80
 
 #
 ###################################################################################################
+
+###################################################################################################
+# WIZZY WORLD CHAT SYSTEM
+#
+# These settings control WiiZZy's World Chat System
+#
+#    World_Chat.Enable
+#        Description: Enables WiiZZy's World Chat System
+#        Default:     1 - (Enabled)
+#                     0 - (Disabled)
+
+World_Chat.Enable = 1
+
+#
+#    World_Chat.CrossFactions
+#        Description: Enables world chatting cross-faction
+#        Default:     0 - (Disabled)
+#                     1 - (Enabled)
+#
+
+World_Chat.CrossFactions = 0
+
+#
+###################################################################################################
+
+###################################################################################################
+# System Awards For Time
+#
+#    SystemAwardsForTime.Enable
+#        Description: Enables Reward system for time
+#        Default:     0 - (Disabled)
+#                     1 - (Enabled)
+
+SystemAwardsForTime.Enable = 0
+
+#
+###################################################################################################

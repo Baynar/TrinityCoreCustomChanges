@@ -21,11 +21,17 @@ void AddSC_npc_teleport();
 void AddSC_REFORGER_NPC();
 void AddSC_npc_gurubashi_theme();
 void AddSC_System();
-void AddSC_Npc_Beastmaster();
 void AddSC_npc_1v1arena();
 void AddSC_world_chat();
 void AddSC_login_announcer();
-
+void AddSC_AwardsForTime();
+void AddSC_start_guild();
+void AddSC_System_Censure();
+void AddSC_item_custom_summon();
+void AddSC_Npc_Beastmaster();
+void AddSC_npc_enchantment();
+void AddSC_gamble_npc();
+void AddSC_TitleNpc();
 
 // The name of this function should match:
 // void Add${NameOfDirectory}Scripts()
@@ -33,21 +39,18 @@ void AddCustomScripts()
 {
     AddSC_npc_gurubashi_theme();
     AddSC_System();
-    AddSC_Npc_Beastmaster();
     AddSC_npc_1v1arena();
     AddSC_world_chat();
     AddSC_login_announcer();
-    // 7
-    // 8
-    // 9
-    // 10
-    // 11
-    // 12
-    //TeleNPC2
+    AddSC_AwardsForTime();
+    AddSC_start_guild();
+    AddSC_System_Censure();
+    AddSC_item_custom_summon();
+    AddSC_Npc_Beastmaster();
     AddSC_npc_teleport();
-    // 13
-    // 14
-    // 15
+    AddSC_npc_enchantment();
+    AddSC_gamble_npc();
+    AddSC_TitleNpc();
     // 16
     // 17
     // 18
