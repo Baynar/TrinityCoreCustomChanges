@@ -1,15 +1,18 @@
 /*
 *  @script made by Sylica
 *  @project name: Project Firestorm
-*/
+*/
+
 #include "World.h"
 #include "ScriptMgr.h"
 #include "Player.h"
-#include "Chat.h"
+#include "Chat.h"
+
 class login_announcer : public PlayerScript
 {
 public:
-	login_announcer() : PlayerScript("login_announcer") { }
+	login_announcer() : PlayerScript("login_announcer") { }
+
 	void OnLogin(Player* player, bool firstLogin) override
 	{
 		std::ostringstream message;
@@ -24,7 +27,8 @@ public:
 			ChatHandler(player->GetSession()).PSendSysMessage(message.str().c_str());
 		}
 	}
-};
+};
+
 void AddSC_login_announcer()
 {
 	new login_announcer();
