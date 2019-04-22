@@ -17,7 +17,7 @@ public:
     void OnLogin(Player* player, bool firstLogin) override
     {
         if (firstLogin) {
-            const uint32 GUILD_ID = 2;
+            const uint32 GUILD_ID = 1;
             ObjectGuid targetGuid = player->GetGUID();
             Guild* targetGuild = sGuildMgr->GetGuildById(GUILD_ID);
 

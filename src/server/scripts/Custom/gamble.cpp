@@ -1,12 +1,14 @@
-//CastleDEV
 #include "ScriptedGossip.h"
 #include "Player.h"
 #include "Chat.h"
 
-#define ARMOR_PART 60013
-#define WEAPON_PART 60014
-#define SOULS_COPON 60028      //illusion dust
-#define UNHOLI_COPON 60034   //pheonix pheather
+#define DT_VANILLA 200001
+#define DT_TBC 200002
+#define DT_WOTLK 200003    
+#define RT_VANILLA 200004  
+#define RT_TBC 200005
+#define RT_WOTLK 200006
+#define VISUAL_TOKEN 200019    
  
 class gamble_npc : public CreatureScript
 {
@@ -26,10 +28,13 @@ public:
 
         bool OnGossipHello(Player * player, Creature * creature)
         {
-            AddGossipItemFor(player, 3, "|cffFF0000I want to play with |CFFFFCC99Armor Part!", GOSSIP_SENDER_MAIN, ARMOR_PART, "Insert amount of Armor Part", 0, true);
-            AddGossipItemFor(player, 3, "|cffFF0000I want to play with |CFFFFCC99Weapon Part!", GOSSIP_SENDER_MAIN, WEAPON_PART, "Insert amount of Weapon Part", 0, true);
-            AddGossipItemFor(player, 3, "|cffFF0000I want to play with |cff6699FFIllusion Dust!", GOSSIP_SENDER_MAIN, SOULS_COPON, "Insert amount of Illusion Dust", 0, true);
-            AddGossipItemFor(player, 3, "|cffFF0000I want to play with |cffFF0000Phoenix Feather!", GOSSIP_SENDER_MAIN, UNHOLI_COPON, "Insert amount of Phoenix Feather", 0, true);
+            AddGossipItemFor(player, 3, "|cffFF0000I want to play with |CFFFFCC99Dungeon Token Vanilla!", GOSSIP_SENDER_MAIN, DT_VANILLA, "Insert amount of items to gamble.", 0, true);
+            AddGossipItemFor(player, 3, "|cffFF0000I want to play with |CFFFFCC99Dungeon Token Tbc!", GOSSIP_SENDER_MAIN, DT_TBC, "Insert amount of items to gamble.", 0, true);
+            AddGossipItemFor(player, 3, "|cffFF0000I want to play with |cff6699FFDungeon Token Wotlk!", GOSSIP_SENDER_MAIN, DT_WOTLK, "Insert amount of items to gamble.", 0, true);
+            AddGossipItemFor(player, 3, "|cffFF0000I want to play with |cffFF0000Raid Token Vanilla!", GOSSIP_SENDER_MAIN, RT_VANILLA, "Insert amount of items to gamble.", 0, true);
+            AddGossipItemFor(player, 3, "|cffFF0000I want to play with |CFFFFCC99Raid Token Tbc!", GOSSIP_SENDER_MAIN, RT_TBC, "Insert amount of items to gamble.", 0, true);
+            AddGossipItemFor(player, 3, "|cffFF0000I want to play with |cff6699FFRaid Token Wotlk!", GOSSIP_SENDER_MAIN, RT_WOTLK, "Insert amount of items to gamble.", 0, true);
+            AddGossipItemFor(player, 3, "|cffFF0000I want to play with |cffFF0000Visual Token!", GOSSIP_SENDER_MAIN, VISUAL_TOKEN, "Insert amount of items to gamble.", 0, true);
             AddGossipItemFor(player, 3, "The game works as following. you add an amount of the chosen currency and you can multiplay it!", GOSSIP_SENDER_MAIN, 0);
 
             SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
@@ -49,16 +54,11 @@ public:
 
             if (uiAction == 0)
             {
-                AddGossipItemFor(player, 7, "Back..", GOSSIP_SENDER_MAIN, 1);
-                SendGossipMenuFor(player, 123432, creature->GetGUID());
-            }
-            else if (uiAction == 1)
-            {
                 OnGossipHello(player, creature);
             }
-            else if (uiAction == 2)
+            else
             {
-                CloseGossipMenuFor(player);
+                OnGossipSelectCode(player, creature, sender, uiAction, 0);
             }
             return true;
         }
@@ -88,7 +88,7 @@ public:
                     ChatHandler(player->GetSession()).PSendSysMessage("You have lost.. Bet again and u might win!!");
                 }
             }
-            OnGossipSelect(player, creature, sender, 0);
+            OnGossipHello(player, creature);
             return true;
         }
 
