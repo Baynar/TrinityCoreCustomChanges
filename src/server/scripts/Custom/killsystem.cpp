@@ -16,7 +16,7 @@ class System_OnPvPKill : public PlayerScript
             WorldPacket data(SMSG_NOTIFICATION, 100);
             WorldPacket data2(SMSG_NOTIFICATION, 100);
             WorldPacket data3(SMSG_NOTIFICATION, 100);
-            int32 ItemReward = 29434;
+            int32 ItemReward = 200019;
             int32 AmountOfRewardsOnKillStreak[4] = { 5, 10, 15, 30 };
             // Announce on X kills
             const int32 pKillerStreak1 = 5;
@@ -41,8 +41,8 @@ class System_OnPvPKill : public PlayerScript
 
             static std::map<uint32, SystemInfo> KillStreakData;
 
-            //if (pKillerGUID == VictimGUID || KillStreakData[pKillerGUID].LastGUIDKill == VictimGUID)
-                //return;
+            if (pKillerGUID == VictimGUID || KillStreakData[pKillerGUID].LastGUIDKill == VictimGUID)
+                return;
 
             if (KillStreakData[VictimGUID].KillStreak >= 5)
             {
