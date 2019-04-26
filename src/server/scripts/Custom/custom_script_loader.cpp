@@ -19,7 +19,7 @@
 void AddSC_Transmogrification();
 void AddSC_npc_teleport();
 void AddSC_REFORGER_NPC();
-//void AddSC_npc_gurubashi_theme();
+void AddSC_Professions_NPC();
 void AddSC_System();
 void AddSC_npc_1v1arena();
 void AddSC_world_chat();
@@ -34,19 +34,19 @@ void AddSC_npc_enchantment();
 void AddSC_TitleNpc();
 void AddSC_dungeon_rewards();
 void AddSC_VisualNPC();
-//void AddSC_Premium_System();
+void AddSC_SpellRegulator();
 void AddSC_custom_reload_commands();
 
 // The name of this function should match:
 // void Add${NameOfDirectory}Scripts()
 void AddCustomScripts()
 {
-    //AddSC_npc_gurubashi_theme();
+    AddSC_Professions_NPC();
     AddSC_System();
     AddSC_npc_1v1arena();
     AddSC_world_chat();
     AddSC_login_announcer();
-    //AddSC_AwardsForTime();
+    AddSC_SpellRegulator();
     AddSC_start_guild();
     AddSC_System_Censure();
     AddSC_item_custom_summon();

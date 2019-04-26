@@ -89,6 +89,7 @@ class AnticheatMgr
         void JumpHackDetection(Player* player, MovementInfo movementInfo,uint32 opcode);
         void TeleportPlaneHackDetection(Player* player, MovementInfo);
         void ClimbHackDetection(Player* player,MovementInfo movementInfo,uint32 opcode);
+        void NoFallHackDetection(Player* player, MovementInfo movementInfo, uint32 opcode);
 
         void BuildReport(Player* player,uint8 reportType);
 

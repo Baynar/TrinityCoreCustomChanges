@@ -1,17 +1,3 @@
-/*
---------------------------------------------------------------------
- _____________
-|             |              
-|___      ____|               
-     |   |  |_|                
-     |   |   _   _              
-     |   |  | |_| |_  ___    ___   _   _   _  ___  _   _   _
-     |   |  | |_   _|/ _ \  / _ \ | | | | | || _ || | | | | |
-     |   |  | | | | | |_| || | | || | | | | ||| ||| | | | | |
-     |   |  | | | | |  _  || | | || |_| |_| |||_||| |_| |_| |
-     |___|  |_| |_| |_| |_||_| |_||_________||___||_________| 
---------------------------------------------------------------------
-*/
 #include "SpellMgr.h"
 #include "Player.h"
 #include "Cell.h"
@@ -322,15 +308,15 @@ class npc_enchantment : public CreatureScript
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "|cff00ff00|TInterface\\icons\\INV_Belt_28:24|t|r[Eternal Belt Buckle]", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "|cff00ff00|TInterface\\icons\\INV_Misc_Desecrated_ClothPants:24|t|r[Enchant Legs]", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11);
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "|cff00ff00|TInterface\\icons\\INV_Misc_Desecrated_LeatherBoots:24|t|r[Enchant Feet]", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 12);
-                if (player->HasSkill(SKILL_ENCHANTING) && player->GetSkillValue(SKILL_ENCHANTING) >= 450)
-                    AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enchant Rings", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 14);
+                //if (player->HasSkill(SKILL_ENCHANTING) && player->GetSkillValue(SKILL_ENCHANTING) >= 450)
+                //AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enchant Rings", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 14);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, me->GetGUID());
             }
 
             void Show1HWeaponMenu(Player* player, Creature* creature)
             {
                 player->PlayerTalkClass->ClearMenus();
-                if (player->getClass() == CLASS_DEATH_KNIGHT)
+                /*if (player->getClass() == CLASS_DEATH_KNIGHT)
                 {
                     AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Rune of Cinderglacier", GOSSIP_SENDER_MAIN,
                         ENCHANT_WEP_CINDERGLACIER);
@@ -382,7 +368,11 @@ class npc_enchantment : public CreatureScript
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Titanguard -- 50 Stamina", GOSSIP_SENDER_MAIN,
                     ENCHANT_WEP_TITANGUARD);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Titanium Weapon Chain -- Less Disarm Time", GOSSIP_SENDER_MAIN,
-                    ENCHANT_WEP_TITANIUM_CHAIN);
+                    ENCHANT_WEP_TITANIUM_CHAIN);*/
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+44 000 Strength", GOSSIP_SENDER_MAIN,
+                    ENCHANT_WEP_POTENCY);
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+44 000 Spell Power", GOSSIP_SENDER_MAIN,
+                    ENCHANT_WEP_MIGHTY_SPELL_POWER);
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Back", GOSSIP_SENDER_MAIN, -1);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, me->GetGUID());
             }
@@ -390,7 +380,7 @@ class npc_enchantment : public CreatureScript
             void Show2HWeaponMenu(Player* player, Creature* creature)
             {
                 player->PlayerTalkClass->ClearMenus();
-                if (player->getClass() == CLASS_DEATH_KNIGHT)
+                /*if (player->getClass() == CLASS_DEATH_KNIGHT)
                 {
                     AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Rune of Cinderglacier", GOSSIP_SENDER_MAIN,
                         ENCHANT_WEP_CINDERGLACIER);
@@ -418,7 +408,11 @@ class npc_enchantment : public CreatureScript
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Massacre -- 110 Attack Power", GOSSIP_SENDER_MAIN,
                     ENCHANT_WEP_MASSACRE);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Mongoose --120 Agility Proc", GOSSIP_SENDER_MAIN,
-                    ENCHANT_WEP_MONGOOSE);
+                    ENCHANT_WEP_MONGOOSE);*/
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+100 000 Strength", GOSSIP_SENDER_MAIN,
+                    ENCHANT_WEP_MASSACRE);
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+100 000 Spell Power", GOSSIP_SENDER_MAIN,
+                    ENCHANT_WEP_GREATER_SPELL_POWER);
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Back", GOSSIP_SENDER_MAIN, -1);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, me->GetGUID());
             }
@@ -426,7 +420,7 @@ class npc_enchantment : public CreatureScript
             void ShowShieldMenu(Player* player, Creature* creature)
             {
                 player->PlayerTalkClass->ClearMenus();
-                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Defense -- 20 Defense", GOSSIP_SENDER_MAIN,
+                /*AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Defense -- 20 Defense", GOSSIP_SENDER_MAIN,
                     ENCHANT_SHIELD_DEFENSE);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Greater Intellect -- 25 Intellect", GOSSIP_SENDER_MAIN,
                     ENCHANT_SHIELD_INTELLECT);
@@ -437,7 +431,11 @@ class npc_enchantment : public CreatureScript
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Titanium Plating -- 36 Block", GOSSIP_SENDER_MAIN,
                     ENCHANT_SHIELD_TITANIUM_PLATING);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Titanium Shield Spike -- 81 Block + 50% less Disarm", GOSSIP_SENDER_MAIN,
-                    ENCHANT_SHIELD_TITANIUM_SPIKE);
+                    ENCHANT_SHIELD_TITANIUM_SPIKE);*/
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+180 000 Stamina", GOSSIP_SENDER_MAIN,
+                    ENCHANT_SHIELD_MAJOR_STAMINA);
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+120 Resilience", GOSSIP_SENDER_MAIN,
+                    ENCHANT_SHIELD_RESILIENCE);
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Back", GOSSIP_SENDER_MAIN, -1);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, me->GetGUID());
             }
@@ -445,7 +443,7 @@ class npc_enchantment : public CreatureScript
             void ShowHeadMenu(Player* player, Creature* creature)
             {
                 player->PlayerTalkClass->ClearMenus();
-                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Arcanum of Blissful Mending -- 30 Spell Power + 10 Mp5", GOSSIP_SENDER_MAIN,
+                /*AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Arcanum of Blissful Mending -- 30 Spell Power + 10 Mp5", GOSSIP_SENDER_MAIN,
                     ENCHANT_HEAD_BLISSFUL_MENDING);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Arcanum of Burning Mysteries -- 25 Fire Resist + 30 Stam", GOSSIP_SENDER_MAIN,
                     ENCHANT_HEAD_BURNING_MYSTERIES);
@@ -454,10 +452,10 @@ class npc_enchantment : public CreatureScript
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Arcanum of The Savage Gladiator -- 30 Stamina + 25 Resil", GOSSIP_SENDER_MAIN,
                     ENCHANT_HEAD_SAVAGE_GLADIATOR);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Arcanum of The Stalwart Protector -- 37 Stamina + Defense", GOSSIP_SENDER_MAIN,
-                    ENCHANT_HEAD_STALWART_PROTECTOR);
-                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Arcanum of Torment -- 29 Spell Power + 20 Resil", GOSSIP_SENDER_MAIN,
+                    ENCHANT_HEAD_STALWART_PROTECTOR);*/
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+44 000 Strength and +100 Resillience", GOSSIP_SENDER_MAIN,
                     ENCHANT_HEAD_TORMENT);
-                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Arcanum of Triumph -- 50 Attack Power + 20 Resil", GOSSIP_SENDER_MAIN,
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+44 000 Spell Power and +100 Resilience", GOSSIP_SENDER_MAIN,
                     ENCHANT_HEAD_TRIUMPH);
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Back", GOSSIP_SENDER_MAIN, -1);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, me->GetGUID());
@@ -466,7 +464,7 @@ class npc_enchantment : public CreatureScript
             void ShowShouldersMenu(Player* player, Creature* creature)
             {
                 player->PlayerTalkClass->ClearMenus();
-                if (player->HasSkill(SKILL_INSCRIPTION) && player->GetSkillValue(SKILL_INSCRIPTION) >= 450)
+                /*if (player->HasSkill(SKILL_INSCRIPTION) && player->GetSkillValue(SKILL_INSCRIPTION) >= 450)
                 {
                     AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Master's Inscription of the Axe", GOSSIP_SENDER_MAIN,
                         ENCHANT_SHOULDER_MASTERS_AXE);
@@ -486,10 +484,10 @@ class npc_enchantment : public CreatureScript
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Greater Inscription of the Gladiator -- 20 Dodge + 15 Defense", GOSSIP_SENDER_MAIN,
                     ENCHANT_SHOULDER_GREATER_GLADIATOR);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Greater Inscription of the Storm -- 24 Spell Power + 15 Crit", GOSSIP_SENDER_MAIN,
-                    ENCHANT_SHOULDER_GREATER_STORM);
-                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Inscription of Dominance -- 23 Spell Power + 15 Resil", GOSSIP_SENDER_MAIN,
+                    ENCHANT_SHOULDER_GREATER_STORM);*/
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+44 000 Spell Power and +100 Resilience", GOSSIP_SENDER_MAIN,
                     ENCHANT_SHOULDER_DOMINANCE);
-                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Inscription of Triumph -- 40 Attack Power + 15 Resil", GOSSIP_SENDER_MAIN,
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+44 000 Strength and +100 Resilience", GOSSIP_SENDER_MAIN,
                     ENCHANT_SHOULDER_TRIUMPH);
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Back", GOSSIP_SENDER_MAIN, -1);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, me->GetGUID());
@@ -498,7 +496,7 @@ class npc_enchantment : public CreatureScript
             void ShowCloakMenu(Player* player, Creature* creature)
             {
                 player->PlayerTalkClass->ClearMenus();
-                if (player->HasSkill(SKILL_ENGINEERING) && player->GetSkillValue(SKILL_ENGINEERING) >= 450)
+                /*if (player->HasSkill(SKILL_ENGINEERING) && player->GetSkillValue(SKILL_ENGINEERING) >= 450)
                 {
                     AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Springy Arachnoweave", GOSSIP_SENDER_MAIN,
                         ENCHANT_CLOAK_SPRINGY_ARACHNOWEAVE);
@@ -526,8 +524,8 @@ class npc_enchantment : public CreatureScript
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Mighty Armor -- 225 Armor", GOSSIP_SENDER_MAIN,
                     ENCHANT_CLOAK_MIGHTY_ARMOR);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Major Agility -- 22 Agility", GOSSIP_SENDER_MAIN,
-                    ENCHANT_CLOAK_MAJOR_AGILITY);
-                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Greater Speed -- 23 Haste", GOSSIP_SENDER_MAIN,
+                    ENCHANT_CLOAK_MAJOR_AGILITY);*/
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+300 Haste", GOSSIP_SENDER_MAIN,
                     ENCHANT_CLOAK_GREATER_SPEED);
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Back", GOSSIP_SENDER_MAIN, -1);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, me->GetGUID());
@@ -536,7 +534,7 @@ class npc_enchantment : public CreatureScript
             void ShowChestMenu(Player* player, Creature* creature)
             {
                 player->PlayerTalkClass->ClearMenus();
-                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Exceptional Mana -- 150 Mana", GOSSIP_SENDER_MAIN,
+                /*pAddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Exceptional Mana -- 150 Mana", GOSSIP_SENDER_MAIN,
                     ENCHANT_CHEST_EXCEPTIONAL_MANA);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Greater Mana Restoration -- 10 Mp5", GOSSIP_SENDER_MAIN,
                     ENCHANT_CHEST_GREATER_MANA_RESTO);
@@ -545,7 +543,9 @@ class npc_enchantment : public CreatureScript
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Super Health -- 225 Health", GOSSIP_SENDER_MAIN,
                     ENCHANT_CHEST_SUPER_HEALTH);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "10 of all stats", GOSSIP_SENDER_MAIN,
-                    ENCHANT_CHEST_ALL_STATS);
+                    ENCHANT_CHEST_ALL_STATS);*/
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+1 000 000 Health", GOSSIP_SENDER_MAIN,
+                    ENCHANT_CHEST_SUPER_HEALTH);
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Back", GOSSIP_SENDER_MAIN, -1);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, me->GetGUID());
             }
@@ -553,7 +553,7 @@ class npc_enchantment : public CreatureScript
             void ShowBracerMenu(Player* player, Creature* creature)
             {
                 player->PlayerTalkClass->ClearMenus();
-                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Greater Assault -- 50 Attack Power", GOSSIP_SENDER_MAIN,
+                /*AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Greater Assault -- 50 Attack Power", GOSSIP_SENDER_MAIN,
                     ENCHANT_BRACER_GREATER_ASSAULT);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Exceptional Intellect -- 16 Intellect", GOSSIP_SENDER_MAIN,
                     ENCHANT_BRACER_EXCEPTIONAL_INTELLECT);
@@ -588,7 +588,11 @@ class npc_enchantment : public CreatureScript
                 }
                 if (player->HasSkill(SKILL_BLACKSMITHING) && player->GetSkillValue(SKILL_BLACKSMITHING) >= 450)
                     AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Socket Bracer", GOSSIP_SENDER_MAIN,
-                        ENCHANT_BRACER_SOCKET_BRACER);
+                        ENCHANT_BRACER_SOCKET_BRACER);*/
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+44 000 Strength", GOSSIP_SENDER_MAIN,
+                    ENCHANT_BRACER_GREATER_ASSAULT);
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+44 000 Spell Power", GOSSIP_SENDER_MAIN,
+                    ENCHANT_BRACER_SUPERIOR_SPELLPOWER);
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Back", GOSSIP_SENDER_MAIN, -1);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, me->GetGUID());
             }
@@ -596,7 +600,7 @@ class npc_enchantment : public CreatureScript
             void ShowGlovesMenu(Player* player, Creature* creature)
             {
                 player->PlayerTalkClass->ClearMenus();
-                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Armsman -- 2% Threat 10 Parry", GOSSIP_SENDER_MAIN,
+                /*AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Armsman -- 2% Threat 10 Parry", GOSSIP_SENDER_MAIN,
                     ENCHANT_GLOVES_ARMSMAN);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Exceptional Spellpower -- 23 Spell Power", GOSSIP_SENDER_MAIN,
                     ENCHANT_GLOVES_EXCEPTIONAL_SPELLPOWER);
@@ -617,7 +621,11 @@ class npc_enchantment : public CreatureScript
                         ENCHANT_GLOVES_PYROROCKET);
                     AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Hyperspeed Accelerators", GOSSIP_SENDER_MAIN,
                         ENCHANT_GLOVES_HYPERSPEED_ACCELERATORS);
-                }
+                }*/
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+44 000 Strength", GOSSIP_SENDER_MAIN,
+                    ENCHANT_GLOVES_CRUSHER);
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+44 000 Spell Power", GOSSIP_SENDER_MAIN,
+                    ENCHANT_GLOVES_EXCEPTIONAL_SPELLPOWER);
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Back", GOSSIP_SENDER_MAIN, -1);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, me->GetGUID());
             }
@@ -627,9 +635,9 @@ class npc_enchantment : public CreatureScript
                 player->PlayerTalkClass->ClearMenus();
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Eternal Belt Buckle", GOSSIP_SENDER_MAIN,
                     ENCHANT_BELT_ETERNAL_BELT_BUCKLE);
-                if (player->HasSkill(SKILL_ENGINEERING) && player->GetSkillValue(SKILL_ENGINEERING) >= 450)
+                /*if (player->HasSkill(SKILL_ENGINEERING) && player->GetSkillValue(SKILL_ENGINEERING) >= 450)
                     AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Frag Belt", GOSSIP_SENDER_MAIN,
-                        ENCHANT_BELT_FRAG_BELT);
+                        ENCHANT_BELT_FRAG_BELT);*/
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Back", GOSSIP_SENDER_MAIN, -1);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, me->GetGUID());
             }
@@ -637,7 +645,7 @@ class npc_enchantment : public CreatureScript
             void ShowLegsMenu(Player* player, Creature* creature)
             {
                 player->PlayerTalkClass->ClearMenus();
-                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Frosthide Leg Armor -- 55 Stam 22 Agil", GOSSIP_SENDER_MAIN,
+                /*AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Frosthide Leg Armor -- 55 Stam 22 Agil", GOSSIP_SENDER_MAIN,
                     ENCHANT_LEGS_FROSTHIDE_ARMOR);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Icescale Leg Armor -- 75 AP 22 Crit", GOSSIP_SENDER_MAIN,
                     ENCHANT_LEGS_ICESCALE_ARMOR);
@@ -646,7 +654,11 @@ class npc_enchantment : public CreatureScript
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Sapphire Spellthread -- 50 SP 30 Stam", GOSSIP_SENDER_MAIN,
                     ENCHANT_LEGS_SAPPHIRE_SPELLTHREAD);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Brilliant Spellthread -- 50 SP 22 Spirit", GOSSIP_SENDER_MAIN,
-                    ENCHANT_LEGS_BRILLIANT_SPELLTHREAD);
+                    ENCHANT_LEGS_BRILLIANT_SPELLTHREAD);*/
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+44 000 Strength and +100 Resilliance", GOSSIP_SENDER_MAIN,
+                    ENCHANT_LEGS_ICESCALE_ARMOR);
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+44 000 Spell Power and +100 Resilliance", GOSSIP_SENDER_MAIN,
+                    ENCHANT_LEGS_SAPPHIRE_SPELLTHREAD);
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Back", GOSSIP_SENDER_MAIN, -1);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, me->GetGUID());
             }
@@ -654,7 +666,7 @@ class npc_enchantment : public CreatureScript
             void ShowBootsMenu(Player* player, Creature* creature)
             {
                 player->PlayerTalkClass->ClearMenus();
-                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Icewalker -- 12 Hit + 12 Crit", GOSSIP_SENDER_MAIN,
+                /*AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Icewalker -- 12 Hit + 12 Crit", GOSSIP_SENDER_MAIN,
                     ENCHANT_BOOTS_ICEWALKER);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Greater Assault -- 32 Assult", GOSSIP_SENDER_MAIN,
                     ENCHANT_BOOTS_GREATER_ASSAULT);
@@ -668,7 +680,9 @@ class npc_enchantment : public CreatureScript
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Superior Agility -- 16 Agility", GOSSIP_SENDER_MAIN,
                     ENCHANT_BOOTS_SUPERIOR_AGILITY);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Tuskarr's Vitality -- 15 Stam + Speed Increase", GOSSIP_SENDER_MAIN,
-                    ENCHANT_BOOTS_TUSKARRS_VITALITY);
+                    ENCHANT_BOOTS_TUSKARRS_VITALITY);*/
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Nitro Boosts", GOSSIP_SENDER_MAIN,
+                    ENCHANT_BOOTS_NITRO_BOOSTS);
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Back", GOSSIP_SENDER_MAIN, -1);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, me->GetGUID());
             }
@@ -676,11 +690,11 @@ class npc_enchantment : public CreatureScript
             void ShowRingsMenu(Player* player, Creature* creature)
             {
                 player->PlayerTalkClass->ClearMenus();
-                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Assault", GOSSIP_SENDER_MAIN,
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+44 000 Strength", GOSSIP_SENDER_MAIN,
                     ENCHANT_RING_ASSAULT);
-                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Greater Spellpower", GOSSIP_SENDER_MAIN,
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+44 000 Spell Power", GOSSIP_SENDER_MAIN,
                     ENCHANT_RING_GREATER_SPELLPOWER);
-                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Stamina", GOSSIP_SENDER_MAIN,
+                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "+100 000 Stamina", GOSSIP_SENDER_MAIN,
                     ENCHANT_RING_STAMINA);
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Back", GOSSIP_SENDER_MAIN, -1);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, me->GetGUID());
@@ -689,10 +703,10 @@ class npc_enchantment : public CreatureScript
             void ShowRangedMenu(Player* player, Creature* creature)
             {
                 player->PlayerTalkClass->ClearMenus();
-                AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Heartseeker Scope", GOSSIP_SENDER_MAIN,
+                /*AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Heartseeker Scope", GOSSIP_SENDER_MAIN,
                     ENCHANT_RANGED_HEARTSEEKER_SCOPE);
                 AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Sun Scope", GOSSIP_SENDER_MAIN,
-                    ENCHANT_RANGED_SUN_SCOPE);
+                    ENCHANT_RANGED_SUN_SCOPE);*/
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Back", GOSSIP_SENDER_MAIN, -1);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, me->GetGUID());
             }
@@ -955,7 +969,12 @@ class npc_enchantment : public CreatureScript
                     // userdata
                     if (action < 0)
                         action = -action;
+
                     Item* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
+                    if (!player->HasItemCount(200018, 10, false)) {
+                        player->GetSession()->SendNotification("|cffFF0000You need x10 [Enchant Token]!");
+                        return true;
+                    }
                     if (!item && slot == INVTYPE_RANGEDRIGHT)
                         item = player->GetItemByPos(INVENTORY_SLOT_BAG_0,
                             INVTYPE_RANGEDRIGHT);
@@ -1015,6 +1034,7 @@ class npc_enchantment : public CreatureScript
                         }
                     }
                     Enchant(player, creature, item, action);
+                    player->DestroyItemCount(200018, 10, false);
                     ShowMainMenu(player, creature);
                 }
                 return true;

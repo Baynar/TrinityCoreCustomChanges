@@ -717,6 +717,12 @@ void World::LoadConfigSettings(bool reload)
     else
         m_int_configs[CONFIG_PORT_WORLD] = sConfigMgr->GetIntDefault("WorldServerPort", 8085);
 
+    // Config Played time rewards
+    m_int_configs[CONFIG_PLAYED_TIME_REWARD_INTERVAL] = sConfigMgr->GetIntDefault("PlayedTimeReward.Interval", 0);
+    m_int_configs[CONFIG_PLAYED_TIME_REWARD_MONEY] = sConfigMgr->GetIntDefault("PlayedTimeReward.Money", 0);
+    m_int_configs[CONFIG_PLAYED_TIME_REWARD_VOTE] = sConfigMgr->GetIntDefault("PlayedTimeReward.Vote", 0);
+    m_int_configs[CONFIG_PLAYED_TIME_REWARD_DONOR] = sConfigMgr->GetIntDefault("PlayedTimeReward.Donor", 0);
+
     // Config values are in "milliseconds" but we handle SocketTimeOut only as "seconds" so divide by 1000
     m_int_configs[CONFIG_SOCKET_TIMEOUTTIME] = sConfigMgr->GetIntDefault("SocketTimeOutTime", 900000) / 1000;
     m_int_configs[CONFIG_SOCKET_TIMEOUTTIME_ACTIVE] = sConfigMgr->GetIntDefault("SocketTimeOutTimeActive", 60000) / 1000;

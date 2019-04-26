@@ -2930,7 +2930,7 @@ bool Spell::UpdateChanneledTargetList()
     return channelTargetEffectMask == 0;
 }
 
-void Spell::prepare(SpellCastTargets const& targets, AuraEffect const* triggeredByAura)
+void Spell::prepare(SpellCastTargets const& targets, AuraEffect const* triggeredByAura, const bool instant)
 {
     if (m_CastItem)
     {
@@ -3041,6 +3041,8 @@ void Spell::prepare(SpellCastTargets const& targets, AuraEffect const* triggered
     }
     else
         m_casttime = m_spellInfo->CalcCastTime(this);
+
+    if (instant) m_casttime = 0;
 
     // don't allow channeled spells / spells with cast time to be cast while moving
     // exception are only channeled spells that have no casttime and SPELL_ATTR5_CAN_CHANNEL_WHEN_MOVING

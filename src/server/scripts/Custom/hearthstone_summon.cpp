@@ -57,7 +57,7 @@ class ItemUse_item_custom_summon : public ItemScript
 	    //{ Don't need an else cause on every error the function is getting returned
 	    // Summons NPCs to the player at distances that can be set furthermore additional npcs could be spawned.
 	    // TeleNPC
-          pPlayer->SummonCreature(190001,pPlayer->GetPositionX()+4 ,pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0,TEMPSUMMON_TIMED_DESPAWN,20000);
+          pPlayer->SummonCreature(190001,pPlayer->GetPositionX()+4 ,pPlayer->GetPositionY(), pPlayer->GetPositionZ() +2, 0,TEMPSUMMON_TIMED_DESPAWN,20000);
 	    //}
             return false;
 	    }

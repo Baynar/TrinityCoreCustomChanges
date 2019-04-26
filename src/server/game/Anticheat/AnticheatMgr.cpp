@@ -23,6 +23,7 @@
 #include "World.h"
 
 #define CLIMB_ANGLE 1.9f
+#define JUMPHEIGHT_LAND 1.65f
 
 AnticheatMgr::AnticheatMgr()
 {
@@ -32,6 +33,29 @@ AnticheatMgr::~AnticheatMgr()
 {
     m_Players.clear();
 }
+
+void AnticheatMgr::NoFallHackDetection(Player* player, MovementInfo movementInfo , uint32 opcode)
+{
+    /*uint32 key = player->GetGUID().GetCounter();
+
+    Map* pMap = player->GetMap();
+
+    if (!pMap)
+        return;
+
+    uint32 distance2D = (uint32)movementInfo.pos.GetExactDist2d(&m_Players[key].GetLastMovementInfo().pos);
+    if (distance2D < 1.f)
+        return;
+
+    float floorz = pMap->GetHeight(player->GetPositionX(), player->GetPositionY(), player->GetPositionZ());
+
+    if (m_Players[key].GetLastMovementInfo().pos.GetPositionZ() - floorz > JUMPHEIGHT_LAND)
+    {
+        BuildReport(player, JUMP_HACK_REPORT);
+        TC_LOG_DEBUG("entities.player.character", "AnticheatMgr:: Jump-Hack detected player GUID (low) %u", player->GetGUID().GetCounter());
+    }*/
+}
+
 
 void AnticheatMgr::JumpHackDetection(Player* player, MovementInfo /* movementInfo */,uint32 opcode)
 {
@@ -70,7 +94,7 @@ void AnticheatMgr::WalkOnWaterHackDetection(Player* player, MovementInfo /* move
 
 }
 
-void AnticheatMgr::FlyHackDetection(Player* player, MovementInfo /* movementInfo */)
+void AnticheatMgr::FlyHackDetection(Player* player, MovementInfo movementInfo)
 {
     if ((sWorld->getIntConfig(CONFIG_ANTICHEAT_DETECTIONS_ENABLED) & FLY_HACK_DETECTION) == 0)
         return;
@@ -138,6 +162,7 @@ void AnticheatMgr::StartHackDetection(Player* player, MovementInfo movementInfo,
     JumpHackDetection(player,movementInfo,opcode);
     TeleportPlaneHackDetection(player, movementInfo);
     ClimbHackDetection(player,movementInfo,opcode);
+    NoFallHackDetection(player, movementInfo, opcode);
 
     m_Players[key].SetLastMovementInfo(movementInfo);
     m_Players[key].SetLastOpcode(opcode);
@@ -330,11 +355,17 @@ void AnticheatMgr::BuildReport(Player* player,uint8 reportType)
         }
     }
 
+    //const Position p = m_Players[key].GetLastMovementInfo().pos;
+    //player->TeleportTo(player->GetMapId(), p.GetPositionX(), p.GetPositionY(), p.GetPositionZ(), 0, TELE_TO_NOT_LEAVE_COMBAT);
+
     if (m_Players[key].GetTotalReports() > sWorld->getIntConfig(CONFIG_ANTICHEAT_REPORTS_INGAME_NOTIFICATION))
     {
         // display warning at the center of the screen, hacky way?
         std::string str = "";
         str = "|cFFFFFC00[AC]|cFF00FFFF[|cFF60FF00" + std::string(player->GetName().c_str()) + "|cFF00FFFF] Possible cheater!";
+        player->TeleportTo(1, 16218.7, 16403.6, -64.3789, 3.12191);
+        player->CastSpell(player, 62248);
+        player->CastSpell(player, 35182);
         WorldPacket data(SMSG_NOTIFICATION, (str.size()+1));
         data << str;
         sWorld->SendGlobalGMMessage(&data);

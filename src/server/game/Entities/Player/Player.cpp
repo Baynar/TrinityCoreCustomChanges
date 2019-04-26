@@ -582,6 +582,12 @@ bool Player::Create(ObjectGuid::LowType guidlow, CharacterCreateInfo* createInfo
     SetHonorPoints(sWorld->getIntConfig(CONFIG_START_HONOR_POINTS));
     SetArenaPoints(sWorld->getIntConfig(CONFIG_START_ARENA_POINTS));
 
+    // PlayedTimeReward
+    ptr_Interval = sWorld->getIntConfig(CONFIG_PLAYED_TIME_REWARD_INTERVAL);
+    ptr_Money = sWorld->getIntConfig(CONFIG_PLAYED_TIME_REWARD_MONEY);
+    ptr_Vote = sWorld->getIntConfig(CONFIG_PLAYED_TIME_REWARD_VOTE);
+    ptr_Donor = sWorld->getIntConfig(CONFIG_PLAYED_TIME_REWARD_DONOR);
+
     // Played time
     m_Last_tick = GameTime::GetGameTime();
     m_Played_time[PLAYED_TIME_TOTAL] = 0;
@@ -1088,6 +1094,20 @@ void Player::Update(uint32 p_time)
         stmt->setString(2, "");
         stmt->setUInt32(3, GetSession()->GetAccountId());
         LoginDatabase.Execute(stmt);
+    }
+
+    // PlayedTimeReward
+    if (ptr_Interval > 0)
+    {
+        if (ptr_Interval <= p_time)
+        {
+            GetSession()->SendAreaTriggerMessage("Bonus for played time.");
+            ModifyMoney(ptr_Money);
+            
+            ptr_Interval = sWorld->getIntConfig(CONFIG_PLAYED_TIME_REWARD_INTERVAL);
+        }
+        else
+            ptr_Interval -= p_time;
     }
 
     if (!m_timedquests.empty())
@@ -5364,7 +5384,7 @@ float Player::GetTotalBaseModValue(BaseModGroup modGroup) const
 
 uint32 Player::GetShieldBlockValue() const
 {
-    float value = std::max(0.f, (m_auraBaseFlatMod[SHIELD_BLOCK_VALUE] + GetStat(STAT_STRENGTH) * 0.5f - 10) * m_auraBasePctMod[SHIELD_BLOCK_VALUE]);
+    float value = std::max(0.f, (m_auraBaseFlatMod[SHIELD_BLOCK_VALUE] + GetStat(STAT_STRENGTH) * 0.1f - 10) * m_auraBasePctMod[SHIELD_BLOCK_VALUE]);
     return uint32(value);
 }
 
@@ -5383,7 +5403,7 @@ float Player::GetMeleeCritFromAgility() const
 
     float crit = critBase->base + GetStat(STAT_AGILITY)*critRatio->ratio;
     crit = crit > 30.0f ? 30.0f : crit;
-    return crit; //* 100.0f;
+    return crit / 100.0f;
 }
 
 void Player::GetDodgeFromAgility(float &diminishing, float &nondiminishing) const
@@ -5436,9 +5456,11 @@ void Player::GetDodgeFromAgility(float &diminishing, float &nondiminishing) cons
 
     // calculate diminishing (green in char screen) and non-diminishing (white) contribution
     diminishing = 100.0f * bonus_agility * dodgeRatio->ratio * crit_to_dodge[pclass-1];
-    diminishing = diminishing > 30.0f ? 30.0f : diminishing;
+    diminishing = diminishing / 1000;
+    diminishing = diminishing > 10.0f ? 10.0f : diminishing;
     nondiminishing = 100.0f * (dodge_base[pclass-1] + base_agility * dodgeRatio->ratio * crit_to_dodge[pclass-1]);
-    nondiminishing = nondiminishing > 30.0f ? 30.0f : nondiminishing;
+    nondiminishing = nondiminishing / 1000;
+    nondiminishing = nondiminishing > 10.0f ? 10.0f : nondiminishing;
 }
 
 float Player::GetSpellCritFromIntellect() const
@@ -5456,7 +5478,7 @@ float Player::GetSpellCritFromIntellect() const
 
     float crit = critBase->base + GetStat(STAT_INTELLECT) * critRatio->ratio;
     crit = crit > 30.0f ? 30.0f : crit;
-    return crit; //* 100.0f;
+    return crit / 100.0f;
 }
 
 float Player::GetRatingMultiplier(CombatRating cr) const
@@ -5474,13 +5496,22 @@ float Player::GetRatingMultiplier(CombatRating cr) const
 
     switch (cr) {
     case CR_HASTE_MELEE:
-        return classRating->ratio / Rating->ratio / 2;
+        return classRating->ratio / Rating->ratio / 1.9;
         break;
     case CR_HASTE_RANGED:
-        return classRating->ratio / Rating->ratio / 2;
+        return classRating->ratio / Rating->ratio / 1.9;
         break;
     case CR_HASTE_SPELL:
-        return classRating->ratio / Rating->ratio / 1.5;
+        return classRating->ratio / Rating->ratio / 1.4;
+        break;
+    case CR_CRIT_MELEE:
+        return classRating->ratio / Rating->ratio * 0.8;
+        break;
+    case CR_CRIT_SPELL:
+        return classRating->ratio / Rating->ratio * 0.8;
+        break;
+    case CR_CRIT_RANGED:
+        return classRating->ratio / Rating->ratio * 0.8;
         break;
     }
 
@@ -8245,6 +8276,18 @@ void Player::CastItemCombatSpell(DamageInfo const& damageInfo, Item* item, ItemT
 void Player::CastItemUseSpell(Item* item, SpellCastTargets const& targets, uint8 cast_count, uint32 glyphIndex)
 {
     ItemTemplate const* proto = item->GetTemplate();
+
+    bool instant = false;
+    if ((proto->Class == ITEM_CLASS_GLYPH) ||
+        (proto->Class == ITEM_CLASS_CONSUMABLE && (
+            proto->SubClass == ITEM_SUBCLASS_ITEM_ENHANCEMENT ||
+            proto->SubClass == ITEM_SUBCLASS_CONSUMABLE_OTHER)) ||
+        (proto->Class == ITEM_CLASS_TRADE_GOODS && (
+            proto->SubClass == ITEM_SUBCLASS_ARMOR_ENCHANTMENT ||
+            proto->SubClass == ITEM_SUBCLASS_WEAPON_ENCHANTMENT ||
+            proto->SubClass == ITEM_SUBCLASS_ENCHANTING)))
+        instant = true;
+
     // special learning case
     if (proto->Spells[0].SpellId == 483 || proto->Spells[0].SpellId == 55884)
     {
@@ -8263,7 +8306,7 @@ void Player::CastItemUseSpell(Item* item, SpellCastTargets const& targets, uint8
         spell->m_CastItem = item;
         spell->m_cast_count = cast_count;                   //set count of casts
         spell->SetSpellValue(SPELLVALUE_BASE_POINT0, learning_spell_id);
-        spell->prepare(targets);
+        spell->prepare(targets, NULL, instant);
         return;
     }
 
@@ -8291,7 +8334,7 @@ void Player::CastItemUseSpell(Item* item, SpellCastTargets const& targets, uint8
         spell->m_CastItem = item;
         spell->m_cast_count = cast_count;                   // set count of casts
         spell->m_glyphIndex = glyphIndex;                   // glyph index
-        spell->prepare(targets);
+        spell->prepare(targets, NULL, instant);
         return;
     }
 

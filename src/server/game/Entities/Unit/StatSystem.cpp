@@ -772,6 +772,8 @@ void Player::UpdateParryPercentage()
         // apply diminishing formula to diminishing parry chance
         value = CalculateDiminishingReturns(parry_cap, getClass(), nondiminishing, diminishing);
 
+        value = value / 4 + 5.0f;
+
         if (sWorld->getBoolConfig(CONFIG_STATS_LIMITS_ENABLE))
              value = value > sWorld->getFloatConfig(CONFIG_STATS_LIMITS_PARRY) ? sWorld->getFloatConfig(CONFIG_STATS_LIMITS_PARRY) : value;
 
