@@ -69,6 +69,11 @@ class boss_grobbulus : public CreatureScript
                     me->SummonCreature(NPC_FALLOUT_SLIME, *target, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT);
             }
 
+            void DamageTaken(Unit* /*done_by*/, uint32 &damage) override
+            {
+                damage /= 95;
+            }
+
             void UpdateAI(uint32 diff) override
             {
                 if (!UpdateVictim())

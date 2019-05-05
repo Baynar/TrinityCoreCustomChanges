@@ -389,6 +389,7 @@ class boss_gothik : public CreatureScript
 
             void DamageTaken(Unit* /*who*/, uint32& damage) override
             {
+                damage /= 95;
                 if (!events.IsInPhase(PHASE_TWO))
                     damage = 0;
             }

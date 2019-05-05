@@ -735,7 +735,8 @@ float Player::GetMissPercentageFromDefense() const
     diminishing += (GetRatingBonusValue(CR_DEFENSE_SKILL) * 0.04f);
 
     // apply diminishing formula to diminishing miss chance
-    return CalculateDiminishingReturns(miss_cap, getClass(), nondiminishing, diminishing);
+    //return CalculateDiminishingReturns(miss_cap, getClass(), nondiminishing, diminishing);
+    return 0.0f;
 }
 
 float const parry_cap[MAX_CLASSES] =

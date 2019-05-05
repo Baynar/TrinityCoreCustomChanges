@@ -234,6 +234,7 @@ public:
                 _abominationDeathCount = 0;
                 _phaseThree = false;
             }
+
             void EnterEvadeMode(EvadeReason /*why*/) override
             {
                 for (NAXData64 portalData : portalList)
@@ -276,8 +277,9 @@ public:
 
             void DamageTaken(Unit* /*attacker*/, uint32& damage) override
             {
+                damage /= 95;
                 if (events.IsInPhase(PHASE_ONE))
-                    damage = 0;
+                    damage = 0; 
             }
 
             void SpellHit(Unit* /*caster*/, SpellInfo const* spell) override

@@ -94,6 +94,11 @@ public:
             _Reset();
         }
 
+        void DamageTaken(Unit* /*done_by*/, uint32 &damage) override
+        {
+            damage /= 95;
+        }
+
         void KilledUnit(Unit* who) override
         {
             if (who->GetTypeId() == TYPEID_PLAYER)

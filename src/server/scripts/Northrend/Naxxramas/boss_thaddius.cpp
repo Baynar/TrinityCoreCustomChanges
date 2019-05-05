@@ -171,6 +171,11 @@ struct boss_thaddius : public BossAI
             }
         }
 
+        void DamageTaken(Unit* /*done_by*/, uint32 &damage) override
+        {
+            damage /= 95;
+        }
+
         void KilledUnit(Unit* victim) override
         {
             if (victim->GetTypeId() == TYPEID_PLAYER)

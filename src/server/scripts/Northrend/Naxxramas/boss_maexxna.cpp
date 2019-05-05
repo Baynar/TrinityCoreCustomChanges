@@ -114,6 +114,11 @@ public:
             events.ScheduleEvent(EVENT_SUMMON, 30s);
         }
 
+        void DamageTaken(Unit* /*done_by*/, uint32 &damage) override
+        {
+            damage /= 95;
+        }
+
         void Reset() override
         {
             _Reset();

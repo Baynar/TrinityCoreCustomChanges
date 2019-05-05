@@ -81,6 +81,11 @@ public:
             instance->DoStopTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_MAKE_QUICK_WERK_OF_HIM_STARTING_EVENT);
         }
 
+        void DamageTaken(Unit* /*done_by*/, uint32 &damage) override
+        {
+            damage /= 95;
+        }
+
         void KilledUnit(Unit* /*Victim*/) override
         {
             if (!(rand32() % 5))

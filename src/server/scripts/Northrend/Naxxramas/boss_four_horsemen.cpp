@@ -443,6 +443,11 @@ class boss_four_horsemen_baron : public CreatureScript
                 DoMeleeAttackIfReady();
             }
 
+            void DamageTaken(Unit* /*done_by*/, uint32 &damage) override
+            {
+                damage /= 95;
+            }
+
             void SpellHitTarget(Unit* /*target*/, SpellInfo const* spell) override
             {
                 if (spell->Id == SPELL_UNHOLY_SHADOW)
@@ -517,6 +522,11 @@ class boss_four_horsemen_thane : public CreatureScript
                 if (me->HasUnitState(UNIT_STATE_CASTING))
                     return;
                 DoMeleeAttackIfReady();
+            }
+
+            void DamageTaken(Unit* /*done_by*/, uint32 &damage) override
+            {
+                damage /= 95;
             }
 
             void SpellHitTarget(Unit* /*target*/, SpellInfo const* spell) override
@@ -600,6 +610,11 @@ class boss_four_horsemen_lady : public CreatureScript
                     Talk(EMOTE_RAGECAST);
                 }
             }
+
+            void DamageTaken(Unit* /*done_by*/, uint32 &damage) override
+            {
+                damage /= 95;
+            }
         };
 
         CreatureAI* GetAI(Creature* creature) const override
@@ -669,6 +684,11 @@ class boss_four_horsemen_sir : public CreatureScript
                     DoCastAOE(SPELL_CONDEMNATION);
                     Talk(EMOTE_RAGECAST);
                 }
+            }
+
+            void DamageTaken(Unit* /*done_by*/, uint32 &damage) override
+            {
+                damage /= 95;
             }
 
             void SpellHitTarget(Unit* /*target*/, SpellInfo const* spell) override

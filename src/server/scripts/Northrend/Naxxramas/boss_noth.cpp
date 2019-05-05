@@ -177,13 +177,11 @@ public:
 
         void DamageTaken(Unit* /*who*/, uint32& damage) override // prevent noth from somehow dying in the balcony phase
         {
+            damage /= 95;
             if (!events.IsInPhase(PHASE_BALCONY))
                 return;
-            if (damage < me->GetHealth())
+            if (damage >= me->GetHealth())
                 return;
-
-            me->SetHealth(1u);
-            damage = 0u;
         }
 
         void HandleSummon(uint32* spellsList, const uint8 nSpells, uint8 num)

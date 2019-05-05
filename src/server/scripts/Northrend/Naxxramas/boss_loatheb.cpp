@@ -72,6 +72,11 @@ class boss_loatheb : public CreatureScript
                 _sporeLoser = true;
             }
 
+            void DamageTaken(Unit* /*done_by*/, uint32 &damage) override
+            {
+                damage /= 95;
+            }
+
             void JustEngagedWith(Unit* /*who*/) override
             {
                 _JustEngagedWith();

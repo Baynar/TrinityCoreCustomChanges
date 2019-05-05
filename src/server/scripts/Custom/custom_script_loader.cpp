@@ -22,20 +22,19 @@ void AddSC_REFORGER_NPC();
 void AddSC_Professions_NPC();
 void AddSC_System();
 void AddSC_npc_1v1arena();
-void AddSC_world_chat();
 void AddSC_login_announcer();
-//void AddSC_AwardsForTime();
+void AddSC_Premium_System();
 void AddSC_start_guild();
 void AddSC_System_Censure();
 void AddSC_item_custom_summon();
 void AddSC_Npc_Beastmaster();
 void AddSC_npc_enchantment();
-//void AddSC_gamble_npc();
 void AddSC_TitleNpc();
 void AddSC_dungeon_rewards();
 void AddSC_VisualNPC();
 void AddSC_SpellRegulator();
 void AddSC_custom_reload_commands();
+void AddSC_morpher_npc();
 
 // The name of this function should match:
 // void Add${NameOfDirectory}Scripts()
@@ -44,7 +43,6 @@ void AddCustomScripts()
     AddSC_Professions_NPC();
     AddSC_System();
     AddSC_npc_1v1arena();
-    AddSC_world_chat();
     AddSC_login_announcer();
     AddSC_SpellRegulator();
     AddSC_start_guild();
@@ -53,11 +51,11 @@ void AddCustomScripts()
     AddSC_Npc_Beastmaster();
     AddSC_npc_teleport();
     AddSC_npc_enchantment();
-    //AddSC_gamble_npc();
+    AddSC_morpher_npc();
     AddSC_TitleNpc();
     AddSC_dungeon_rewards();
     AddSC_VisualNPC();
-    //AddSC_Premium_System();
+    AddSC_Premium_System();
     AddSC_custom_reload_commands();
     // 19
     // 20

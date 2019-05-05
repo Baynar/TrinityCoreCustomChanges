@@ -113,6 +113,11 @@ public:
             me->SetSpeed(UnitMoveType::MOVE_RUN, 12.0f);
         }
 
+        void DamageTaken(Unit* /*done_by*/, uint32 &damage) override
+        {
+            damage /= 95;
+        }
+
         void JustEngagedWith(Unit* /*who*/) override
         {
             _JustEngagedWith();

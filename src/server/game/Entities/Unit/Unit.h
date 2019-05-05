@@ -1688,6 +1688,7 @@ class TC_GAME_API Unit : public WorldObject
     protected:
         explicit Unit (bool isWorldObject);
 
+        GameObject* m_temp_transport;
         void BuildValuesUpdate(uint8 updatetype, ByteBuffer* data, Player* target) const override;
 
         void _UpdateSpells(uint32 time);

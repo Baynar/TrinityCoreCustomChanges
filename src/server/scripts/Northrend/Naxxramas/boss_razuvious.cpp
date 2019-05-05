@@ -86,6 +86,11 @@ public:
             }
         }
 
+        void DamageTaken(Unit* /*done_by*/, uint32 &damage) override
+        {
+            damage /= 95;
+        }
+
         void JustReachedHome() override
         {
             _JustReachedHome();

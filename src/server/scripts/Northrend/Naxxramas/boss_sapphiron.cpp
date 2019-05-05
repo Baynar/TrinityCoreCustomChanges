@@ -170,9 +170,9 @@ class boss_sapphiron : public CreatureScript
 
             void DamageTaken(Unit* /*who*/, uint32& damage) override
             {
-                if (damage < me->GetHealth() || !events.IsInPhase(PHASE_FLIGHT))
+                damage /= 95;
+                if (damage >= me->GetHealth() || !events.IsInPhase(PHASE_FLIGHT))
                     return;
-                damage = me->GetHealth()-1; // don't die during air phase
             }
 
             void JustEngagedWith(Unit* /*who*/) override

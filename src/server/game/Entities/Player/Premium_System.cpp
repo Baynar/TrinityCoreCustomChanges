@@ -43,7 +43,8 @@
 #include "GameTime.h"
 #include "Map.h"
 
-int BUFFS[24] = { 24752, 48074, 43223, 36880, 467, 48469, 48162, 48170, 16877, 10220, 13033, 11735, 10952, 23948, 26662, 47440, 53307, 132, 23737, 48470, 43002, 26393, 24705, 69994 };
+// original buffs : int BUFFS[24] = { 24752, 48074, 43223, 36880, 467, 48469, 48162, 48170, 16877, 10220, 13033, 11735, 10952, 23948, 26662, 47440, 53307, 132, 23737, 48470, 43002, 26393, 24705, 69994 };
+int BUFFS[28] = { 24752, 48074, 43223, 36880, 467, 48469, 48162, 48170, 16877, 10220, 13033, 11735, 10952, 23948, 47440, 53307, 132, 48470, 43002, 69994, 23737, 23738, 23766, 23767, 23768, 23769, 23735, 23736 };
 int DEBUFFS[4] = { 57724, 57723, 80354, 95809 };
 
 PREM::PREM() { }
@@ -415,34 +416,34 @@ public:
 void PREM::AddPremiumToPlayer(Player* player)
 {
 	uint32 id = sPREM->GetPlayerPremiumId(player);
-	uint32 maxPower = sPREM->IncreaseValueWithModifier(player, sPREM->Premium[id].power_max);
+	//uint32 maxPower = sPREM->IncreaseValueWithModifier(player, sPREM->Premium[id].power_max);
 
 	if (sPREM->GetPremiumTitleId())
 	{
 		if (!player->HasTitle(sPREM->GetPremiumTitleId())){player->SetTitle(sCharTitlesStore.LookupEntry(sPREM->GetPremiumTitleId()), false); };
 
-		player->SetUInt32Value(PLAYER_CHOSEN_TITLE, sPREM->GetPremiumTitleId());
+		//player->SetUInt32Value(PLAYER_CHOSEN_TITLE, sPREM->GetPremiumTitleId());
 	}
 
-	if (sPREM->IsPremiumHealthPointBonusEnabled())
+	/*if (sPREM->IsPremiumHealthPointBonusEnabled())
 	{
 		uint32 MaxHP = sPREM->IncreaseValueWithModifier(player, sPREM->Premium[id].hp);
 
 		player->SetMaxHealth(MaxHP);
-	}
+	}*/
 
-	if ((player->GetPowerType() == POWER_MANA) && (sPREM->IsPremiumManaPointBonusEnabled()))	{ player->SetMaxPower(POWER_MANA, maxPower); };
+	//if ((player->GetPowerType() == POWER_MANA) && (sPREM->IsPremiumManaPointBonusEnabled()))	{ player->SetMaxPower(POWER_MANA, maxPower); };
 
-	if ((player->GetPowerType() == POWER_RAGE) && (sPREM->IsPremiumRagePointBonusEnabled()))	{ player->SetMaxPower(POWER_RAGE, maxPower); };
+	//if ((player->GetPowerType() == POWER_RAGE) && (sPREM->IsPremiumRagePointBonusEnabled()))	{ player->SetMaxPower(POWER_RAGE, maxPower); };
 
-	ChatHandler(player->GetSession()).PSendSysMessage("player:PremiumRankAdded.");
+	//ChatHandler(player->GetSession()).PSendSysMessage("player:PremiumRankAdded.");
 }
 
 void PREM::RemovePremiumFromPlayer(Player* player)
 {
 	uint32 id = sPREM->GetPlayerPremiumId(player);
 
-	player->SetMaxHealth(sPREM->Premium[id].hp);
+	//player->SetMaxHealth(sPREM->Premium[id].hp);
 	//player->ResetTalents(false);
 
 	if (sPREM->GetPremiumTitleId() > 0)
@@ -452,11 +453,11 @@ void PREM::RemovePremiumFromPlayer(Player* player)
 
 	if (player->HasTitle(sPREM->GetPremiumTitleId())){ player->SetTitle(sCharTitlesStore.LookupEntry(sPREM->GetPremiumTitleId()), true); };
 
-	if ((player->GetPowerType() == POWER_MANA) && (sPREM->IsPremiumManaPointBonusEnabled()))	{ player->SetMaxPower(POWER_MANA, sPREM->Premium[id].power_max); };
+	//if ((player->GetPowerType() == POWER_MANA) && (sPREM->IsPremiumManaPointBonusEnabled()))	{ player->SetMaxPower(POWER_MANA, sPREM->Premium[id].power_max); };
 
-	if ((player->GetPowerType() == POWER_RAGE) && (sPREM->IsPremiumRagePointBonusEnabled()))	{ player->SetMaxPower(POWER_RAGE, sPREM->Premium[id].power_max); };
+	//if ((player->GetPowerType() == POWER_RAGE) && (sPREM->IsPremiumRagePointBonusEnabled()))	{ player->SetMaxPower(POWER_RAGE, sPREM->Premium[id].power_max); };
 
-	ChatHandler(player->GetSession()).PSendSysMessage("player:PremiumRankRemoved.");
+	//ChatHandler(player->GetSession()).PSendSysMessage("player:PremiumRankRemoved.");
 }
 
 void PREM::UpdatePlayerCustomHomeTeleport(uint32 guid, uint32 map_id, float x, float y, float z, float o)
@@ -603,10 +604,12 @@ void SendPremiumMessage(std::string msg, uint8 team_id)
 		Player *player = itr->second->GetPlayer();
 		bool IsPlayerPremium = sPREM->IsPlayerPremium(player);
 
-			if ((player->IsGameMaster()) || (IsPlayerPremium && ((player->GetTeamId() == team_id) || ((player->GetTeamId() != team_id) && ((sPREM->GetPremiumChatTeam()) || team_id == 2)))))
+        ChatHandler(player->GetSession()).PSendSysMessage(msg.c_str());
+
+			/*if ((player->IsGameMaster()) || (IsPlayerPremium && ((player->GetTeamId() == team_id) || ((player->GetTeamId() != team_id) && ((sPREM->GetPremiumChatTeam()) || team_id == 2)))))
 			{
-				ChatHandler(player->GetSession()).PSendSysMessage(msg.c_str());
-			}
+                ChatHandler(player->GetSession()).PSendSysMessage(msg.c_str());
+			}*/
 	}
 };
 
@@ -615,7 +618,7 @@ class Unit_Premium_Engine : public UnitScript
 public:
 	Unit_Premium_Engine() : UnitScript("Unit_Premium_Engine"){ };
 
-	virtual void OnHeal(Unit* healer, Unit* reciever, uint32& gain)
+	/*virtual void OnHeal(Unit* healer, Unit* reciever, uint32& gain)
 	{
 		Player* healer_player = healer->ToPlayer();
 		Player* target_player = reciever->ToPlayer();
@@ -677,7 +680,7 @@ public:
 		{
 			damage = sPREM->DecreaseValueWithModifier(target_player, damage);
 		}
-	}
+	}*/
 };
 
 class Player_Premium_Engine : public PlayerScript
@@ -687,7 +690,7 @@ public:
 
 		virtual void OnLogout(Player* player)
 		{
-			sPREM->RemovePremiumFromPlayer(player);
+			//sPREM->RemovePremiumFromPlayer(player);
 
 			uint32 id = sPREM->GetPlayerPremiumId(player);
 
@@ -697,11 +700,11 @@ public:
         virtual void OnSave(Player* player){
             if (sPREM->IsPlayerPremium(player))
             {
-                sPREM->AddPremiumToPlayer(player);
+                //sPREM->AddPremiumToPlayer(player);
             }
             else
             {
-                sPREM->RemovePremiumFromPlayer(player);
+                //sPREM->RemovePremiumFromPlayer(player);
             }
         }
 
@@ -752,19 +755,19 @@ public:
 				{
 					ChatHandler(player->GetSession()).PSendSysMessage("Greetings %s. You are ranked Premium.", player->GetName());
 
-					sPREM->AddPremiumToPlayer(player);
+					//sPREM->AddPremiumToPlayer(player);
 				}
 				else
 				{
 					ChatHandler(player->GetSession()).PSendSysMessage("Greetings %s.You can donate to recieve the Premium rank.", player->GetName());
 	
-					sPREM->RemovePremiumFromPlayer(player);
+					//sPREM->RemovePremiumFromPlayer(player);
 				}
 		} // On Login
 
 		virtual void OnDuelEnd(Player* killer, Player* victim, DuelCompleteType /*type*/)
 		{ // idea from Kaev
-			if (sPREM->IsPlayerPremium(killer))
+			/*if (sPREM->IsPlayerPremium(killer))
 			{
 				killer->SetHealth(killer->GetMaxHealth());
 
@@ -786,7 +789,7 @@ public:
 					{
 						if (victim->HasAura(DEBUFFS[i])){ victim->RemoveAura(DEBUFFS[i]); };
 					}
-			}
+			}*/
 		} // Duel end
 
 		virtual void OnChat(Player* player, uint32 type, uint32 lang, std::string& msg)
@@ -795,8 +798,9 @@ public:
 			uint32 id = sPREM->GetPlayerPremiumId(player);
 			std::string PCMSG = "";
 
-			std::string ChannelColor = "|cff808080";
-			std::string TeamColor[2] = { "|cff0080FF", "|cffCC0000" };
+			std::string ChannelColorGM = "|cffff8000";
+            std::string ChannelColorPREM = "|cffa335ee";
+            std::string ChannelColorMEM = "|cff0070dd";
 
 			if (player->IsGameMaster()) // here we will set the gm's stored values so they clear the checks.
 			{
@@ -807,41 +811,49 @@ public:
 			if ((msg != "") && (lang != LANG_ADDON) && (msg != "Away") && (player->CanSpeak() == true) && (sPREM->Premium[id].chat == 1))
 			{
 
-				if ((current_time < (sPREM->Premium[id].time + sPREM->SetPremiumChatDelay())) || (sPREM->Premium[id].last_message == msg))
+				/*if ((current_time < (sPREM->Premium[id].time + sPREM->SetPremiumChatDelay())) || (sPREM->Premium[id].last_message == msg))
 				{
 					ChatHandler(player->GetSession()).PSendSysMessage("-Spam detect triggered-");
 				}
 				else
-				{
+				{*/
 					sPREM->Premium[id].last_message = msg;
 					sPREM->Premium[id].time = current_time;
 					uint8 team_id = player->GetTeamId();
+                    std::string PlayerNameLink = ChatHandler(player->GetSession()).GetNameLink();
 
-					PCMSG += "[" + ChannelColor + "Premium|r][" + TeamColor[team_id] + player->GetName() + "|r]";
 
-					if (player->IsGameMaster())
-					{ 
-						PCMSG += "[GM]"; 
-						team_id = 2;
-					};
+                    if (player->IsGameMaster())
+                    {
+                        PCMSG += "[" + ChannelColorGM + "GM|r][|cff00ccff" + PlayerNameLink + "|r]";
+                        team_id = 2;
+                    }
+                    else if (sPREM->IsPlayerPremium(player))
+                    {
+                        PCMSG += "[" + ChannelColorPREM + "Premium|r][|cffe6cc80" + PlayerNameLink + "|r]";
+                    }
+                    else
+                    {
+                        PCMSG += "[" + ChannelColorMEM + "World|r][|cffabd473" + PlayerNameLink + "|r]";
+                    }
 
-					PCMSG += ":" + msg;
+					PCMSG += ": " + msg;
 
 					SendPremiumMessage(PCMSG, team_id);
 
 					msg = -1;
-				}
+				//}
 			}
 		}
 
 		virtual void OnGiveXP(Player* player, uint32& amount, Unit* /*victim*/) 
 		{
-			amount = sPREM->IncreaseValueWithModifier(player, amount);
+			//amount = sPREM->IncreaseValueWithModifier(player, amount);
 		}
 
 		virtual void OnReputationChange(Player* player, uint32 /*factionId*/, int32& standing, bool /*incremental*/)
 		{
-			standing = sPREM->IncreaseValueWithModifier(player, standing);
+			//standing = sPREM->IncreaseValueWithModifier(player, standing);
 		}
 };
 
@@ -868,7 +880,7 @@ public:
 				{
 					std::string output = sPREM->GetPlayerPremiumTimeLeftInString(player);
 
-					ChatHandler(player->GetSession()).PSendSysMessage("You allready have the Premium rank.");
+					ChatHandler(player->GetSession()).PSendSysMessage("You already have the Premium rank.");
 
 					ChatHandler(player->GetSession()).PSendSysMessage("Your Premium Rank will expire in %s.", output.c_str());
 
@@ -1045,7 +1057,7 @@ public:
 
 		static std::vector<ChatCommand> ResetPremiumCommandTable =
 		{
-			{ "tp", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumResetTPCommand, "allows the player to reset there talent points without cost." },
+			//{ "tp", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumResetTPCommand, "allows the player to reset there talent points without cost." },
 		};
 
 		static std::vector<ChatCommand> SetPremiumCommandChangeTable =
@@ -1062,6 +1074,7 @@ public:
 			{ "race", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumChangeRaceCommand, "allows the player to change there race during next login." },
 			{ "faction", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumChangeFactionCommand, "allows the player to change there faction during next login." },
 			{ "customize", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumCustomizeCommand, "allows the player to re-costumize there character during next login." },
+            { "rename", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumRenameCommand, "allows the player to re-costumize there character during next login." },
 		};
 
 		static std::vector<ChatCommand> ChatPremiumCommandChangeTable =
@@ -1086,27 +1099,27 @@ public:
 
 		static std::vector<ChatCommand> PremiumCommandLearnMyTable =
 		{
-			{ "spells", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumLearnMySpells, "allows the player to learn all there class spells." },
+			//{ "spells", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumLearnMySpells, "allows the player to learn all there class spells." },
 		};
 
 		static std::vector<ChatCommand> PremiumCommandLearnTable =
 		{
-			{ "my", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium learn my sub command tree.", PremiumCommandLearnMyTable },
+			//{ "my", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium learn my sub command tree.", PremiumCommandLearnMyTable },
 		};
 
 		static std::vector<ChatCommand> PremiumCommandUnlearnMyTable =
 		{
-			{ "spells", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumUnlearnMySpells, "allows the player to unlearn all there class spells." },
+			//{ "spells", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumUnlearnMySpells, "allows the player to unlearn all there class spells." },
 		};
 
 		static std::vector<ChatCommand> PremiumCommandUnlearnTable =
 		{
-			{ "my", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium learn my sub command tree.", PremiumCommandUnlearnMyTable },
+			//{ "my", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium learn my sub command tree.", PremiumCommandUnlearnMyTable },
 		};
 
 		static std::vector<ChatCommand> PremiumCommandDnDAppearTable =
 		{
-			{ "off", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumDnDAppearOffCommand, "allows Premium playesr to appear to you." },
+			{ "off", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumDnDAppearOffCommand, "allows Premium players to appear to you." },
 			{ "on", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumDnDAppearOnCommand, "Blocks Premium players from appearing to you." },
 		};
 
@@ -1119,27 +1132,28 @@ public:
 		{
 			{ "chat", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium Chat sub command tree.", ChatPremiumCommandChangeTable },
 			{ "buff", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumBuffCommand, "Premium Command used to Buff your character." },
-			{ "maxskills", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumMaxSkillsCommand, "Premium Command used to repair all items without cost." },
-			{ "morph", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumMorphPlayerCommand, "Premium Command used to morph." },
-			{ "demorph", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumDeMorphPlayerCommand, "Premium Command used to demorph." },
-			{ "repair", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumRepairCommand, "Premium Command used to repair all items without cost." },
-			{ "reset", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium reset sub command tree.", ResetPremiumCommandTable },
-			{ "teleport", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium set sub command tree.", PremiumTeleportTable },
-			{ "set", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium set sub command tree.", SetPremiumCommandChangeTable },
+			//{ "maxskills", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumMaxSkillsCommand, "Premium Command used to repair all items without cost." },
+			//{ "morph", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumMorphPlayerCommand, "Premium Command used to morph." },
+			//{ "demorph", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumDeMorphPlayerCommand, "Premium Command used to demorph." },
+			//{ "repair", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumRepairCommand, "Premium Command used to repair all items without cost." },
+			//{ "reset", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium reset sub command tree.", ResetPremiumCommandTable },
+			//{ "teleport", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium set sub command tree.", PremiumTeleportTable },
+			//{ "set", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium set sub command tree.", SetPremiumCommandChangeTable },
 			{ "character", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium Character customizing commands.", CharacterPremiumCommandChangeTable },
 			{ "on", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumOnCommand, "Fast activate Premium Title." },
 			{ "off", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumOffCommand, "Fast un-activate Premium Title." },
-			{ "learn", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium Learn sub command tree.", PremiumCommandLearnTable },
-			{ "unlearn", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium Unlearn sub command tree.", PremiumCommandUnlearnTable },
-			{ "who", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumWhoCommand, "List online premium members." },
+			//{ "learn", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium Learn sub command tree.", PremiumCommandLearnTable },
+			//{ "unlearn", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium Unlearn sub command tree.", PremiumCommandUnlearnTable },
+			{ "who", rbac::RBAC_IN_GRANTED_LIST, true, &HandlePremiumWhoCommand, "List online Premium members." },
 			{ "appear", rbac::RBAC_IN_GRANTED_LIST, false, &HandlePremiumAppearCommand, "" },
-			{ "dnd", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium DnD sub command tree.", PremiumCommandDnDTable },
+			//{ "dnd", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium DnD sub command tree.", PremiumCommandDnDTable },
 
 		};
 
 		static std::vector<ChatCommand> commandTable =
 		{
-			{ "premium", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium custom commands.", PremiumCommandTable },
+            { "chat", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium Chat sub command tree.", ChatPremiumCommandChangeTable },
+			{ "Premium", rbac::RBAC_IN_GRANTED_LIST, true, NULL, "Premium custom commands.", PremiumCommandTable },
 		};
 		return commandTable;
 	}
@@ -1189,11 +1203,11 @@ public:
 
 	static bool HandlePremiumResetTPCommand(ChatHandler* handler, const char* args)
 	{
-		Player* player = handler->GetSession()->GetPlayer();
+        /*Player* player = handler->GetSession()->GetPlayer();
 
 		bool return_type;
 
-		if (!sPREM->IsPlayerPremium(player))
+        if (!sPREM->IsPlayerPremium(player))
 		{
 			handler->PSendSysMessage("You dont have the Premium rank. You must have the Premium rank to use this command.");
 			return_type = false;
@@ -1215,7 +1229,8 @@ public:
 			return_type = true;
 		}
 
-		return return_type;
+		return return_type;*/
+        return false;
 	}
 
 	static bool HandlePremiumDrinkCommand(ChatHandler* handler, const char* args)
@@ -1354,6 +1369,27 @@ public:
 		return return_type;
 	}
 
+    static bool HandlePremiumRenameCommand(ChatHandler* handler, const char* args)
+    {
+        Player* player = handler->GetSession()->GetPlayer();
+
+        bool return_type;
+
+        if (!sPREM->IsPlayerPremium(player))
+        {
+            handler->PSendSysMessage("You dont have the Premium rank. You must have the Premium rank to use this command.");
+            return_type = false;
+        }
+        else
+        {
+            player->SetAtLoginFlag(AT_LOGIN_RENAME);
+            handler->PSendSysMessage("Relog to rename your character.");
+
+            return_type = true;
+        }
+        return return_type;
+    }
+
 	// Player commands
 
 	static bool HandlePremiumChatOnCommand(ChatHandler* handler, const char* args)
@@ -1362,13 +1398,22 @@ public:
 
 		bool return_type;
 
-		/*if (!sPREM->IsPlayerPremium(player) || !player->IsGameMaster())
+		if (!sPREM->IsPlayerPremium(player))
 		{
-			handler->PSendSysMessage("You dont have the Premium rank. You must have the Premium rank to use this command.");
+            uint32 id = sPREM->GetPlayerPremiumId(player);
 
-			return_type = false;
+            sPREM->Premium[id].chat = true;
+            sPREM->Premium[id].chat_time = GameTime::GetGameTime() - sPREM->SetPremiumChatDelay();
+
+            ChatHandler(player->GetSession()).PSendSysMessage("World Chat on.");
+            ChatHandler(player->GetSession()).PSendSysMessage("now switch to `/s` and chat away.");
+            return_type = true;
+
+			/*handler->PSendSysMessage("You dont have the Premium rank. You must have the Premium rank to use this command.");
+
+			return_type = false;*/
 		}
-		else*/
+		else
         if (sPREM->IsPlayerPremium(player))
 		{
 			uint32 id = sPREM->GetPlayerPremiumId(player);
@@ -1390,11 +1435,18 @@ public:
 
 		bool return_type;
 
-		if (!sPREM->IsPlayerPremium(player) || !player->IsGameMaster())
+		if (!sPREM->IsPlayerPremium(player))
 		{
-			handler->PSendSysMessage("You dont have the Premium rank. You must have the Premium rank to use this command.");
+            uint32 id = sPREM->GetPlayerPremiumId(player);
 
-			return_type = false;
+            sPREM->Premium[id].chat = false;
+
+            ChatHandler(player->GetSession()).PSendSysMessage("World Chat off.");
+
+            return_type = true;
+			/*handler->PSendSysMessage("You dont have the Premium rank. You must have the Premium rank to use this command.");
+
+			return_type = false;*/
 		}
 		else
 		{
@@ -1752,7 +1804,7 @@ public:
 		{
 			sPREM->Premium[id].dndappear = false;
 
-			ChatHandler(player->GetSession()).PSendSysMessage("You have allowed other Premiums to appear to you.");
+			ChatHandler(player->GetSession()).PSendSysMessage("You have allowed other Premium to appear to you.");
 		}
 		return return_type;
 	}
@@ -1775,7 +1827,7 @@ public:
 		{
 			sPREM->Premium[id].dndappear = true;
 
-			ChatHandler(player->GetSession()).PSendSysMessage("You have blocked other Premiums from appearing to you.");
+			ChatHandler(player->GetSession()).PSendSysMessage("You have blocked other Premium from appearing to you.");
 		}
 		return return_type;
 	}
